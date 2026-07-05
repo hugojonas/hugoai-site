@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HugoAI — Jouw telefoon, nooit meer gemist</title>
+<meta name="description" content="Hugo neemt op als jij het druk hebt. Een Nederlandse AI-stem die klinkt als een mens en afspraken direct in je agenda zet.">
+<meta name="theme-color" content="#f6f3ee">
+<meta name="author" content="HugoAI">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><radialGradient id='g' cx='35%25' cy='30%25'><stop offset='0%25' stop-color='%23b9f3d8'/><stop offset='45%25' stop-color='%23a9c7ff'/><stop offset='100%25' stop-color='%23ffb7d9'/></radialGradient></defs><circle cx='16' cy='16' r='14' fill='url(%23g)'/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HugoAI">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="HugoAI — Jouw telefoon, nooit meer gemist">
+<meta property="og:description" content="Hugo neemt op als jij het druk hebt. Een Nederlandse AI-stem die klinkt als een mens en afspraken direct in je agenda zet.">
+<!-- TIP: zet og:image + twitter:image op de VOLLEDIGE URL zodra je domein live is, bv. https://hugoai.nl/og-image.png (sommige platforms eisen een absolute URL) -->
+<meta property="og:image" content="og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HugoAI — Jouw telefoon, nooit meer gemist">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HugoAI — Jouw telefoon, nooit meer gemist">
+<meta name="twitter:description" content="Een Nederlandse AI-stem die opneemt, menselijk klinkt en afspraken direct inplant.">
+<meta name="twitter:image" content="og-image.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#211d18;
+  --ink-soft:#6f675c;
+  --paper:#f6f3ee;
+  --paper-deep:#efeae2;
+  --line:rgba(33,29,24,.1);
+  --iri-a:#ffb7d9;
+  --iri-b:#a9c7ff;
+  --iri-c:#b9f3d8;
+  --iri-d:#ffe3a9;
+  --radius:22px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+
+::selection{background:var(--iri-b);color:var(--ink)}
+
+h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:400;letter-spacing:-.015em;line-height:1.06}
+
+/* ---------- canvas stage ---------- */
+#stage{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+}
+#stage canvas{display:block;width:100%;height:100%}
+
+/* soft ambient wash behind everything */
+.wash{
+  position:fixed;inset:-20%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(45% 40% at 68% 30%, rgba(255,183,217,.22), transparent 70%),
+    radial-gradient(50% 45% at 25% 70%, rgba(169,199,255,.20), transparent 70%),
+    radial-gradient(40% 40% at 60% 85%, rgba(185,243,216,.16), transparent 70%);
+  filter:blur(10px);
+}
+
+/* ---------- CSS fallback orb (when WebGL is unavailable) ---------- */
+#cssOrb{
+  position:fixed;z-index:1;pointer-events:none;display:none;
+  width:min(58vmin,540px);height:min(58vmin,540px);
+  left:50%;top:50%;transform:translate(-50%,-52%);
+  border-radius:50%;
+}
+body.no-webgl #cssOrb{display:block}
+body.no-webgl #stage{display:none}
+#cssOrb .layer{position:absolute;inset:0;border-radius:50%}
+#cssOrb .l1{
+  background:conic-gradient(from 210deg,
+    #ffd9ec, #c9dcff, #c9f6e2, #fff0c9, #ffd0e6, #cfe0ff, #ffd9ec);
+  animation:orbSpin 22s linear infinite;
+  filter:blur(2px) saturate(1.15);
+}
+#cssOrb .l2{
+  inset:6%;
+  background:radial-gradient(circle at 34% 30%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 26%, rgba(255,255,255,0) 55%),
+             radial-gradient(circle at 68% 74%, rgba(169,199,255,.55), transparent 60%);
+  mix-blend-mode:screen;
+}
+#cssOrb .l3{
+  inset:-4%;
+  background:radial-gradient(circle, transparent 58%, rgba(255,255,255,.55) 72%, transparent 76%);
+  animation:orbBreathe 5.5s ease-in-out infinite;
+}
+@keyframes orbSpin{to{transform:rotate(360deg)}}
+@keyframes orbBreathe{0%,100%{transform:scale(.985)}50%{transform:scale(1.02)}}
+@media (prefers-reduced-motion:reduce){
+  #cssOrb .l1,#cssOrb .l3{animation:none}
+}
+
+/* ---------- content ---------- */
+main{position:relative;z-index:3}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px clamp(20px,4vw,56px);
+  transition:background .4s ease, backdrop-filter .4s ease;
+}
+nav.scrolled{background:rgba(246,243,238,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:500;display:flex;align-items:center;gap:.55rem;color:var(--ink);text-decoration:none}
+.logo .dot{
+  width:14px;height:14px;border-radius:50%;
+  background:conic-gradient(from 40deg,var(--iri-a),var(--iri-b),var(--iri-c),var(--iri-d),var(--iri-a));
+  box-shadow:0 0 12px rgba(169,199,255,.8);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:.92rem;
+  padding:.8rem 1.5rem;border-radius:999px;border:none;cursor:pointer;
+  text-decoration:none;transition:transform .25s ease, box-shadow .25s ease;
+}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(33,29,24,.22)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+
+section{position:relative;padding:0 clamp(20px,5vw,64px)}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* hero */
+#hero{height:100vh;min-height:640px;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:8vh}
+#hero .wrap{width:100%}
+.hero-kicker{
+  font-size:.8rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:1.1rem;
+}
+.hero-title{
+  font-size:clamp(2.6rem,7.2vw,6.2rem);
+  max-width:12ch;
+}
+.hero-title em{font-style:italic;font-weight:300;
+  background:linear-gradient(100deg,#c96fa4,#5f83d8 45%,#3fae86);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{max-width:44ch;color:var(--ink-soft);font-size:clamp(1rem,1.4vw,1.15rem);margin-top:1.4rem}
+.hero-cta{display:flex;gap:.9rem;margin-top:2.1rem;flex-wrap:wrap}
+.hero-scrollhint{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+  font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);
+}
+
+/* speech lines emerging from the orb */
+#speech{
+  position:fixed;z-index:4;inset:0;pointer-events:none;
+}
+.say{
+  position:absolute;max-width:min(320px,72vw);
+  font-family:'Fraunces',serif;font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.35;
+  color:var(--ink);opacity:0;
+  padding:.7rem 1.1rem;border-radius:18px;
+  background:rgba(255,255,255,.55);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 10px 40px rgba(120,110,160,.12);
+}
+.say .caret{display:inline-block;width:.55ch;color:#8f7bd8;font-weight:600}
+.say.caller{font-family:'Inter',sans-serif;font-size:clamp(.85rem,1.3vw,1rem);color:var(--ink-soft);background:rgba(246,243,238,.7)}
+
+/* mic pill */
+#micBtn{
+  position:fixed;z-index:21;right:clamp(18px,3vw,44px);bottom:clamp(18px,3vw,36px);
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-size:.82rem;font-weight:600;color:var(--ink);
+  background:rgba(255,255,255,.7);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:999px;padding:.62rem 1.05rem;cursor:pointer;
+  transition:border-color .25s, transform .25s;
+}
+#micBtn:hover{border-color:var(--ink);transform:translateY(-2px)}
+#micBtn .ring{width:9px;height:9px;border-radius:50%;background:#c9c2b7;transition:background .3s, box-shadow .3s}
+#micBtn.live .ring{background:#3fae86;box-shadow:0 0 0 4px rgba(63,174,134,.2)}
+#micBtn.hidden{display:none}
+
+/* generic section headings */
+.sec-head{padding-top:16vh;max-width:640px}
+.sec-eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:1rem}
+.sec-title{font-size:clamp(2rem,4.4vw,3.6rem)}
+.sec-sub{color:var(--ink-soft);margin-top:1.1rem;font-size:1.05rem;max-width:46ch}
+
+/* how it works — pinned shot */
+#how{min-height:100vh;padding-bottom:14vh}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,28px);margin-top:9vh}
+.step{
+  background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(20px,2.4vw,34px);
+}
+.step .num{
+  font-family:'Fraunces',serif;font-size:.95rem;color:var(--ink-soft);
+  display:inline-flex;width:2.2rem;height:2.2rem;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:50%;margin-bottom:1.2rem;
+}
+.step h3{font-size:1.45rem;margin-bottom:.55rem}
+.step p{color:var(--ink-soft);font-size:.95rem}
+
+/* features */
+#features{min-height:100vh;padding-bottom:14vh}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);margin-top:8vh}
+.feat{
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(20px,2.2vw,30px);
+  background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(255,255,255,.35));
+  position:relative;overflow:hidden;
+}
+.feat::after{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
+  background:radial-gradient(120% 90% at 20% 0%,rgba(255,183,217,.18),transparent 55%),
+             radial-gradient(120% 90% at 90% 100%,rgba(169,199,255,.2),transparent 55%);
+  pointer-events:none;
+}
+.feat:hover::after{opacity:1}
+.feat .glyph{
+  width:38px;height:38px;border-radius:12px;margin-bottom:1.1rem;
+  background:conic-gradient(from 220deg,var(--iri-a),var(--iri-b),var(--iri-c),var(--iri-d),var(--iri-a));
+  opacity:.85;filter:saturate(1.05);
+}
+.feat h3{font-size:1.25rem;margin-bottom:.45rem}
+.feat p{color:var(--ink-soft);font-size:.92rem}
+
+/* sectors */
+#sectors{min-height:90vh;padding-bottom:14vh}
+.sector-row{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);margin-top:7vh}
+.sector{
+  border-radius:var(--radius);padding:clamp(24px,2.6vw,36px);
+  border:1px solid var(--line);min-height:220px;display:flex;flex-direction:column;justify-content:space-between;
+  background:rgba(255,255,255,.55);
+}
+.sector.live{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.sector.live p{color:rgba(246,243,238,.68)}
+.sector h3{font-size:1.6rem}
+.sector p{color:var(--ink-soft);font-size:.92rem;margin-top:.5rem}
+.tag{
+  align-self:flex-start;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  padding:.38rem .8rem;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);
+}
+.sector.live .tag{border-color:rgba(246,243,238,.35);color:#b9f3d8}
+.tag.pulse{position:relative}
+.tag.pulse::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#3fae86;margin-right:.5rem;vertical-align:1px;box-shadow:0 0 0 0 rgba(63,174,134,.5);animation:tagPulse 2.2s infinite}
+@keyframes tagPulse{70%{box-shadow:0 0 0 8px rgba(63,174,134,0)}100%{box-shadow:0 0 0 0 rgba(63,174,134,0)}}
+
+/* big CTA */
+#cta{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
+#cta .inner{max-width:760px;padding:14vh 0}
+#cta h2{font-size:clamp(2.4rem,6vw,5rem)}
+#cta p{color:var(--ink-soft);margin:1.4rem auto 2.4rem;max-width:44ch}
+.confirm-chip{
+  display:inline-flex;align-items:center;gap:.6rem;margin-bottom:2rem;
+  font-size:.86rem;font-weight:600;color:var(--ink);
+  background:rgba(255,255,255,.7);border:1px solid var(--line);
+  padding:.6rem 1.2rem;border-radius:999px;backdrop-filter:blur(8px);
+}
+.confirm-chip svg{width:16px;height:16px;stroke:#3fae86;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+footer{
+  position:relative;z-index:3;
+  border-top:1px solid var(--line);
+  padding:44px clamp(20px,5vw,64px);
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
+  color:var(--ink-soft);font-size:.85rem;background:var(--paper);
+}
+footer .logo{font-size:1.1rem}
+
+/* reveals — visible by default, JS opts them into animation */
+.reveal{opacity:1;transform:none}
+body.anim-ready .reveal{opacity:0;transform:translateY(34px)}
+body.anim-ready .reveal.shown{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
+
+@media (max-width:860px){
+  .steps,.feat-grid,.sector-row{grid-template-columns:1fr}
+  #hero{justify-content:flex-end}
+  .hero-scrollhint{display:none}
+  .say{font-size:.95rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .btn,.feat::after{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="wash" aria-hidden="true"></div>
+
+<!-- WebGL stage -->
+<div id="stage" aria-hidden="true"></div>
+
+<!-- CSS fallback orb -->
+<div id="cssOrb" aria-hidden="true">
+  <div class="layer l1"></div>
+  <div class="layer l2"></div>
+  <div class="layer l3"></div>
+</div>
+
+<!-- speech emerging from the orb -->
+<div id="speech" aria-hidden="true">
+  <div class="say caller" id="sayCaller"><span class="txt"></span></div>
+  <div class="say" id="sayHugo"><span class="txt"></span><span class="caret">|</span></div>
+</div>
+
+<nav id="nav">
+  <a class="logo" href="#hero"><span class="dot"></span>Hugo</a>
+  <a class="btn btn-dark" href="#cta">Plan een demo</a>
+</nav>
+
+<button id="micBtn" type="button" aria-label="Laat de bol op je stem reageren">
+  <span class="ring"></span><span class="lbl">Praat tegen de bol</span>
+</button>
+
+<main>
+
+  <section id="hero">
+    <div class="wrap">
+      <p class="hero-kicker reveal">Nederlandse AI-receptionist</p>
+      <h1 class="hero-title reveal">Jouw telefoon,<br><em>nooit meer gemist.</em></h1>
+      <p class="hero-sub reveal">Hugo neemt op als jij het druk hebt. Vloeiend Nederlands, dag en nacht, en de afspraak staat meteen in je agenda.</p>
+      <div class="hero-cta reveal">
+        <a class="btn btn-dark" href="#cta">Hoor Hugo live</a>
+        <a class="btn btn-ghost" href="#how">Hoe het werkt</a>
+      </div>
+    </div>
+    <div class="hero-scrollhint">Scroll</div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-eyebrow reveal">Hoe het werkt</p>
+        <h2 class="sec-title reveal">Drie seconden.<br>Zo snel gaat het.</h2>
+        <p class="sec-sub reveal">Geen menu's, geen wachtmuziek. Een gesprek zoals met je beste medewerker.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="num">1</span>
+          <h3>Een klant belt</h3>
+          <p>Buiten openingstijden, tijdens een proefrit, midden in de spits — het maakt niet uit wanneer.</p>
+        </div>
+        <div class="step reveal">
+          <span class="num">2</span>
+          <h3>Hugo neemt op</h3>
+          <p>Binnen één beltoon. Hij begroet, luistert en stelt precies de juiste vragen. In natuurlijk Nederlands.</p>
+        </div>
+        <div class="step reveal">
+          <span class="num">3</span>
+          <h3>De afspraak staat</h3>
+          <p>Direct in jouw agenda, met bevestiging naar de klant. Jij ziet het pas als het al geregeld is.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-eyebrow reveal">Waarom Hugo</p>
+        <h2 class="sec-title reveal">Alles wat een topreceptionist kan.<br>Zonder pauze.</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat reveal"><div class="glyph"></div><h3>24/7 bereikbaar</h3><p>Ook 's avonds, in het weekend en midden in de drukte. Elke oproep beantwoord, elke klant te woord gestaan.</p></div>
+        <div class="feat reveal"><div class="glyph"></div><h3>Vloeiend Nederlands</h3><p>Natuurlijk Nederlands, zonder robotpauzes. Hugo praat zoals jouw klanten praten.</p></div>
+        <div class="feat reveal"><div class="glyph"></div><h3>Nooit een klant gemist</h3><p>Geen voicemail, geen wachtrij, geen gemiste kans. Elke beller krijgt meteen een echt gesprek.</p></div>
+        <div class="feat reveal"><div class="glyph"></div><h3>Boekt direct in je agenda</h3><p>Proefritten, behandelingen, bezichtigingen — meteen ingepland en bevestigd, terwijl de klant nog aan de lijn is.</p></div>
+        <div class="feat reveal"><div class="glyph"></div><h3>Werkt in elke sector</h3><p>Hugo leert jouw aanbod, prijzen en toon. Binnen een dag praat hij als iemand van je eigen team.</p></div>
+        <div class="feat reveal"><div class="glyph"></div><h3>Klinkt menselijk</h3><p>Warm, geduldig en to the point. En vraagt een beller of het een AI is? Dan is Hugo daar gewoon eerlijk over.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sectors">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-eyebrow reveal">Sectoren</p>
+        <h2 class="sec-title reveal">Gebouwd voor jouw branche</h2>
+        <p class="sec-sub reveal">Eén Hugo, verschillende vakkennis. Vandaag live bij autobedrijven — de rest volgt snel.</p>
+      </div>
+      <div class="sector-row">
+        <div class="sector live reveal">
+          <span class="tag pulse">Nu live</span>
+          <div><h3>Autodealer</h3><p>Proefritten, occasionvragen, APK-afspraken. Hugo kent het aanbod op kenteken.</p></div>
+        </div>
+        <div class="sector reveal">
+          <span class="tag">Binnenkort</span>
+          <div><h3>Tandarts</h3><p>Spoedklachten filteren, controles plannen, no-shows terugbellen.</p></div>
+        </div>
+        <div class="sector reveal">
+          <span class="tag">Binnenkort</span>
+          <div><h3>Makelaar</h3><p>Bezichtigingen inplannen en woningvragen beantwoorden — ook op zaterdag.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .demo-form{max-width:560px;margin:clamp(20px,4vh,40px) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
+    .demo-form .field{display:flex;flex-direction:column;gap:6px}
+    .demo-form .field-wide{grid-column:1/-1}
+    .demo-form label{font-size:.82rem;color:var(--ink-soft);font-weight:500}
+    .demo-form label span{opacity:.6}
+    .demo-form input,.demo-form textarea{font:inherit;font-size:.98rem;color:var(--ink);background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+    .demo-form input:focus,.demo-form textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(33,29,24,.08)}
+    .demo-form textarea{resize:vertical;min-height:70px}
+    .demo-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+    .demo-form #demoSubmit{grid-column:1/-1;justify-self:center;margin-top:6px;cursor:pointer;border:none}
+    .demo-form #demoSubmit[disabled]{opacity:.6;cursor:progress}
+    .form-status{grid-column:1/-1;text-align:center;font-size:.92rem;min-height:1.2em;margin:2px 0 0}
+    .form-status.ok{color:#2f8f68}
+    .form-status.err{color:#b4472e}
+    @media(max-width:560px){.demo-form{grid-template-columns:1fr}}
+  </style>
+  <section id="cta">
+    <div class="inner">
+      <div class="confirm-chip reveal">
+        <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+        Afspraak bevestigd — donderdag 14:00
+      </div>
+      <h2 class="reveal">Laat Hugo één dag<br>jouw telefoon doen.</h2>
+      <p class="reveal">Plan een korte demo. Laat je gegevens achter, dan bellen we je terug — en hoor je Hugo zelf.</p>
+
+      <form id="demoForm" class="demo-form reveal" novalidate>
+        <div class="field">
+          <label for="f-naam">Naam</label>
+          <input id="f-naam" name="naam" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-bedrijf">Bedrijf</label>
+          <input id="f-bedrijf" name="bedrijf" type="text" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="f-tel">Telefoon</label>
+          <input id="f-tel" name="telefoon" type="tel" autocomplete="tel">
+        </div>
+        <div class="field field-wide">
+          <label for="f-bericht">Waar mag Hugo mee helpen? <span>(optioneel)</span></label>
+          <textarea id="f-bericht" name="bericht" rows="3"></textarea>
+        </div>
+        <input type="hidden" name="_subject" value="🔔 Nieuwe demo-aanvraag via HugoAI">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+        <button type="submit" class="btn btn-dark" id="demoSubmit">Plan mijn demo</button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <a class="logo" href="#hero"><span class="dot"></span>Hugo</a>
+  <span>© 2026 HugoAI — Utrecht, Nederland</span>
+  <span>Gemaakt met een stem die nooit slaapt.</span>
+</footer>
+
+<!-- ============ contactformulier → Formspree ============ -->
+<script>
+(function(){
+  // ▶ ACTIVEREN: maak een gratis form aan op https://formspree.io en plak hieronder je endpoint
+  //   (bijv. "https://formspree.io/f/abcdwxyz"). Jouw e-mail blijft in je Formspree-account, niet in deze code.
+  var FORM_ENDPOINT = "https://formspree.io/f/xrewjzvl";
+
+  var form = document.getElementById("demoForm");
+  if (!form) return;
+  var statusEl = document.getElementById("formStatus");
+  var btn = document.getElementById("demoSubmit");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    statusEl.className = "form-status";
+
+    if (form.elements._gotcha && form.elements._gotcha.value) return; // spam-val
+    if (!form.checkValidity()) {
+      statusEl.textContent = "Vul je naam en een geldig e-mailadres in.";
+      statusEl.classList.add("err");
+      return;
+    }
+    if (FORM_ENDPOINT.indexOf("YOUR_FORM_ID") !== -1) {
+      statusEl.textContent = "Formulier nog niet gekoppeld — activeer Formspree (zie README).";
+      statusEl.classList.add("err");
+      return;
+    }
+
+    var voornaam = ((form.elements.naam && form.elements.naam.value) || "").trim().split(/\s+/)[0];
+    var telefoon = ((form.elements.telefoon && form.elements.telefoon.value) || "").trim();
+
+    btn.disabled = true;
+    var oldLabel = btn.textContent;
+    btn.textContent = "Versturen…";
+
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body: new FormData(form)
+    })
+      .then(function (r) {
+        if (r.ok) {
+          form.reset();
+          var dank = voornaam ? ("Bedankt " + voornaam + "!") : "Bedankt!";
+          dank += telefoon ? (" We bellen je snel op " + telefoon + " voor je demo.")
+                           : " We bellen je snel terug voor je demo.";
+          statusEl.textContent = dank;
+          statusEl.classList.add("ok");
+        } else {
+          statusEl.textContent = "Er ging iets mis. Probeer het later opnieuw.";
+          statusEl.classList.add("err");
+        }
+      })
+      .catch(function () {
+        statusEl.textContent = "Geen verbinding. Probeer het later opnieuw.";
+        statusEl.classList.add("err");
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = oldLabel;
+      });
+  });
+})();
+</script>
+
+<!-- ============ libs (UMD, met onerror-vangnet) ============ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" onerror="window.__gsapFail=true"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" onerror="window.__gsapFail=true"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" onerror="window.__lenisFail=true"></script>
+
+<!-- ============ site logic (geen module — draait altijd) ============ -->
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasGsap = !window.__gsapFail && typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+  var hasLenis = !window.__lenisFail && typeof window.Lenis !== "undefined";
+
+  // nav shading
+  var nav = document.getElementById("nav");
+  function onScrollNav(){ nav.classList.toggle("scrolled", (window.scrollY||0) > 40); }
+  window.addEventListener("scroll", onScrollNav, {passive:true});
+  onScrollNav();
+
+  // Lenis smooth scroll (skip bij reduced motion of load-fout)
+  var lenis = null;
+  if (hasLenis && !reduced){
+    lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1.0 });
+    function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+  window.__lenis = lenis;
+
+  // Reveal-animaties: alleen inschakelen als GSAP er is; anders blijft alles zichtbaar.
+  if (hasGsap && !reduced){
+    window.gsap.registerPlugin(window.ScrollTrigger);
+    if (lenis){
+      lenis.on("scroll", window.ScrollTrigger.update);
+      window.gsap.ticker.lagSmoothing(0);
+    }
+    document.body.classList.add("anim-ready");
+    var reveals = document.querySelectorAll(".reveal");
+    reveals.forEach(function(el, i){
+      window.ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: function(){
+          setTimeout(function(){ el.classList.add("shown"); }, (i % 4) * 90);
+        }
+      });
+    });
+    // hero-reveals meteen
+    document.querySelectorAll("#hero .reveal").forEach(function(el, i){
+      setTimeout(function(){ el.classList.add("shown"); }, 350 + i * 140);
+    });
+  }
+  window.__hasGsap = hasGsap;
+  window.__reduced = reduced;
+})();
+</script>
+
+<!-- ============ de held: iriserende stem-bol (Three.js module) ============ -->
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }
+</script>
+
+<script type="module">
+import * as THREE from "three";
+
+const reduced = window.__reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isMobile = window.matchMedia("(max-width: 860px)").matches;
+const stage = document.getElementById("stage");
+
+function enableCssFallback(){
+  document.body.classList.add("no-webgl");
+  document.getElementById("micBtn").classList.add("hidden");
+}
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" });
+  const gl = renderer.getContext();
+  if (!gl) throw new Error("no context");
+} catch (e) {
+  enableCssFallback();
+  renderer = null;
+}
+
+if (renderer) {
+
+/* ---------- scene ---------- */
+const DPR_CAP = 1.5;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, DPR_CAP));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 50);
+camera.position.set(0, 0, 6.2);
+
+/* ---------- shaders ---------- */
+const NOISE = /* glsl */`
+// Simplex 3D noise — Ashima / Stefan Gustavson (MIT)
+vec4 permute(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
+vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }
+float snoise(vec3 v){
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i  = floor(v + dot(v, C.yyy));
+  vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy);
+  vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + 1.0 * C.xxx;
+  vec3 x2 = x0 - i2 + 2.0 * C.xxx;
+  vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+  i = mod(i, 289.0);
+  vec4 p = permute(permute(permute(
+            i.z + vec4(0.0, i1.z, i2.z, 1.0))
+          + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+          + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 1.0/7.0;
+  vec3 ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_);
+  vec4 x = x_ * ns.x + ns.yyyy;
+  vec4 y = y_ * ns.x + ns.yyyy;
+  vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy);
+  vec4 b1 = vec4(x.zw, y.zw);
+  vec4 s0 = floor(b0)*2.0 + 1.0;
+  vec4 s1 = floor(b1)*2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy, h.x);
+  vec3 p1 = vec3(a0.zw, h.y);
+  vec3 p2 = vec3(a1.xy, h.z);
+  vec3 p3 = vec3(a1.zw, h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+  m = m * m;
+  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+}
+float fbm(vec3 p){
+  float f = 0.0;
+  f += 0.5333 * snoise(p);
+  f += 0.2667 * snoise(p * 2.02);
+  f += 0.1333 * snoise(p * 4.03);
+  return f;
+}
+`;
+
+const vertexShader = /* glsl */`
+uniform float uTime;
+uniform float uAmp;        // displacement-sterkte
+uniform float uFreq;       // noise-frequentie
+uniform float uAudio;      // stem/mic-niveau 0..1
+uniform float uBreath;     // adem-schaal
+uniform vec2  uMouse;      // -1..1
+varying vec3 vNormal;
+varying vec3 vWorldPos;
+varying float vDisp;
+${NOISE}
+
+float displaceAmt(vec3 p){
+  float t = uTime * 0.28;
+  float n = fbm(p * uFreq + vec3(t, t * 0.7, -t * 0.5));
+  // stem-golven: hogere frequentie-rimpel die met audio meegroeit
+  float ripple = snoise(p * (uFreq * 3.4) + vec3(0.0, uTime * 1.4, 0.0));
+  float mouseBend = dot(normalize(p), normalize(vec3(uMouse * 1.2, 1.0))) * 0.06 * length(uMouse);
+  return n * uAmp
+       + ripple * uAmp * (0.28 + uAudio * 1.15)
+       + mouseBend;
+}
+
+void main(){
+  vec3 p = normalize(position);
+  float d = displaceAmt(p);
+  vDisp = d;
+
+  // ademende basisschaal + audio-puls
+  float scale = uBreath * (1.0 + uAudio * 0.06);
+  vec3 displaced = p * (1.0 + d) * scale;
+
+  // normal her-afleiden via buurpunten (tangent-ruimte)
+  vec3 tangent = normalize(cross(p, abs(p.y) > 0.99 ? vec3(1.0,0.0,0.0) : vec3(0.0,1.0,0.0)));
+  vec3 bitan = normalize(cross(p, tangent));
+  float eps = 0.06;
+  vec3 pt = normalize(p + tangent * eps);
+  vec3 pb = normalize(p + bitan * eps);
+  vec3 dpt = pt * (1.0 + displaceAmt(pt)) * scale;
+  vec3 dpb = pb * (1.0 + displaceAmt(pb)) * scale;
+  vNormal = normalize(cross(dpt - displaced, dpb - displaced));
+
+  vec4 world = modelMatrix * vec4(displaced, 1.0);
+  vWorldPos = world.xyz;
+  gl_Position = projectionMatrix * viewMatrix * world;
+}
+`;
+
+const fragmentShader = /* glsl */`
+precision highp float;
+uniform float uTime;
+uniform float uAudio;
+uniform float uHueShift;   // faseverschuiving per scroll-sectie
+uniform float uIriStrength;
+uniform vec3  uBgTint;
+varying vec3 vNormal;
+varying vec3 vWorldPos;
+varying float vDisp;
+${NOISE}
+
+// dunne-film interferentie: optisch padverschil -> per-kanaal cosinus
+vec3 thinFilm(float ndv, float thickness){
+  // ruwe benadering van interferentie: pad ~ dikte * cos(theta)
+  float opd = thickness * (0.6 + 0.4 * ndv);
+  // golflengte-gewichten R/G/B (nm-ratio's genormaliseerd)
+  vec3 wl = vec3(1.0, 1.23, 1.48);
+  vec3 phase = 6.28318 * (opd * wl + uHueShift);
+  return 0.5 + 0.5 * cos(phase);
+}
+
+void main(){
+  vec3 N = normalize(vNormal);
+  vec3 V = normalize(cameraPosition - vWorldPos);
+  float ndv = clamp(dot(N, V), 0.0, 1.0);
+  float fresnel = pow(1.0 - ndv, 2.4);
+
+  // filmdikte varieert met noise + vervorming + stem
+  float thickN = fbm(normalize(vWorldPos) * 1.6 + vec3(uTime * 0.06));
+  float thickness = 1.35 + thickN * 0.85 + vDisp * 2.2 + uAudio * 0.5;
+
+  vec3 iri = thinFilm(ndv, thickness);
+  // pastel maken: richting wit trekken, dan verzadiging terug bij grazing
+  vec3 pastel = mix(vec3(1.0), iri, 0.42 + 0.45 * fresnel);
+
+  // parelmoer-basis (warm wit, licht getint door achtergrond)
+  vec3 pearl = mix(vec3(0.965, 0.955, 0.945), uBgTint, 0.15);
+
+  // hoofdmix: kern parelmoer, iriserende rand
+  vec3 col = mix(pearl, pastel, clamp(fresnel * 1.35 * uIriStrength + 0.12, 0.0, 1.0));
+
+  // dubbele studio-highlights
+  vec3 L1 = normalize(vec3(-0.55, 0.75, 0.65));
+  vec3 L2 = normalize(vec3(0.7, -0.25, 0.55));
+  float spec1 = pow(max(dot(reflect(-L1, N), V), 0.0), 90.0);
+  float spec2 = pow(max(dot(reflect(-L2, N), V), 0.0), 40.0);
+  col += vec3(1.0) * spec1 * 0.85;
+  col += iri * spec2 * 0.35;
+
+  // zachte rim-gloed die met stem oplicht
+  col += pastel * fresnel * (0.18 + uAudio * 0.5);
+
+  // subtiele binnen-schaduw voor diepte
+  col *= 0.92 + 0.08 * ndv;
+
+  // rand licht doorschijnend zoals een zeepbel
+  float alpha = mix(0.97, 0.82, pow(ndv, 1.6));
+  gl_FragColor = vec4(col, alpha);
+}
+`;
+
+const uniforms = {
+  uTime:        { value: 0 },
+  uAmp:         { value: 0.10 },
+  uFreq:        { value: 1.15 },
+  uAudio:       { value: 0 },
+  uBreath:      { value: 1 },
+  uMouse:       { value: new THREE.Vector2(0, 0) },
+  uHueShift:    { value: 0 },
+  uIriStrength: { value: 1 },
+  uBgTint:      { value: new THREE.Color(0xf6f3ee) }
+};
+
+const detail = isMobile ? 80 : 128;
+const geo = new THREE.SphereGeometry(1, detail, detail);
+const mat = new THREE.ShaderMaterial({
+  vertexShader, fragmentShader, uniforms,
+  transparent: true
+});
+const orb = new THREE.Mesh(geo, mat);
+scene.add(orb);
+
+// satelliet-bolletjes voor de "split"-state (features-sectie)
+const satUniformsList = [];
+const sats = new THREE.Group();
+const SAT_COUNT = isMobile ? 4 : 6;
+for (let i = 0; i < SAT_COUNT; i++) {
+  const u = {
+    uTime: { value: 0 }, uAmp: { value: 0.16 }, uFreq: { value: 2.2 },
+    uAudio: { value: 0 }, uBreath: { value: 1 }, uMouse: { value: new THREE.Vector2() },
+    uHueShift: { value: i * 0.13 }, uIriStrength: { value: 1.2 },
+    uBgTint: { value: new THREE.Color(0xf6f3ee) }
+  };
+  satUniformsList.push(u);
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 48, 48),
+    new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms: u, transparent: true })
+  );
+  const a = (i / SAT_COUNT) * Math.PI * 2;
+  m.userData.angle = a;
+  m.scale.setScalar(0.001);
+  sats.add(m);
+}
+scene.add(sats);
+
+/* ---------- orb state (door scroll gestuurd, ge-lerpt in rAF) ---------- */
+const state = {
+  x: isMobile ? 0 : 1.35,  // hero: rechts van de tekst
+  y: isMobile ? 0.9 : 0.35,
+  scale: isMobile ? 1.15 : 1.55,
+  amp: 0.10, freq: 1.15,
+  hue: 0.0, iri: 1.0,
+  split: 0.0,              // 0 = één bol, 1 = satellieten uit
+  rotSpeed: 0.05
+};
+const target = Object.assign({}, state);
+
+function applyShot(shot){ Object.assign(target, shot); }
+
+const SHOTS = {
+  hero:     { x: isMobile ? 0 : 1.35, y: isMobile ? 0.9 : 0.35, scale: isMobile ? 1.15 : 1.55, amp: 0.10, freq: 1.15, hue: 0.00, iri: 1.0, split: 0, rotSpeed: 0.05 },
+  how:      { x: isMobile ? 0 : -1.6, y: 0.55, scale: 0.95, amp: 0.05, freq: 0.9,  hue: 0.12, iri: 0.85, split: 0, rotSpeed: 0.12 },
+  features: { x: 0, y: isMobile ? -0.8 : 0.1, scale: 0.62, amp: 0.16, freq: 1.9,  hue: 0.28, iri: 1.25, split: 1, rotSpeed: 0.2 },
+  sectors:  { x: isMobile ? 0 : 1.7, y: -0.1, scale: 0.85, amp: 0.08, freq: 1.2,  hue: 0.45, iri: 1.0, split: 0, rotSpeed: 0.08 },
+  cta:      { x: 0, y: 0.25, scale: 1.25, amp: 0.045, freq: 0.8, hue: 0.62, iri: 1.15, split: 0, rotSpeed: 0.04 }
+};
+applyShot(SHOTS.hero);
+
+if (window.__hasGsap && !reduced) {
+  const ST = window.ScrollTrigger;
+  const mkTrig = (sel, shot) => ST.create({
+    trigger: sel, start: "top 60%", end: "bottom 60%",
+    onEnter: () => applyShot(SHOTS[shot]),
+    onEnterBack: () => applyShot(SHOTS[shot])
+  });
+  ST.create({ trigger: "#hero", start: "top top", end: "bottom 60%", onEnter: () => applyShot(SHOTS.hero), onEnterBack: () => applyShot(SHOTS.hero) });
+  mkTrig("#how", "how");
+  mkTrig("#features", "features");
+  mkTrig("#sectors", "sectors");
+  mkTrig("#cta", "cta");
+  // extra cinematiek: hero pinned gevoel — orb groeit licht mee met eerste scroll
+  window.gsap.to(target, {
+    scale: "+=0.25",
+    ease: "none",
+    scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.6 }
+  });
+} else {
+  // zonder GSAP: sectiewissel via IntersectionObserver
+  const map = { hero: "#hero", how: "#how", features: "#features", sectors: "#sectors", cta: "#cta" };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) applyShot(SHOTS[en.target.dataset.shot]); });
+  }, { threshold: 0.35 });
+  Object.entries(map).forEach(([k, sel]) => {
+    const el = document.querySelector(sel);
+    if (el) { el.dataset.shot = k; io.observe(el); }
+  });
+}
+
+/* ---------- muis-parallax ---------- */
+const mouse = new THREE.Vector2(0, 0);
+if (!reduced) {
+  window.addEventListener("pointermove", (e) => {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -((e.clientY / window.innerHeight) * 2 - 1);
+  }, { passive: true });
+}
+
+/* ---------- stem: mic (optioneel) of autonome spraak-envelop ---------- */
+let analyser = null, audioData = null, micLive = false;
+const micBtn = document.getElementById("micBtn");
+micBtn.addEventListener("click", async () => {
+  if (micLive) return;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaStreamSource(stream);
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    audioData = new Uint8Array(analyser.frequencyBinCount);
+    src.connect(analyser);
+    micLive = true;
+    micBtn.classList.add("live");
+    micBtn.querySelector(".lbl").textContent = "Hij luistert…";
+  } catch (err) {
+    micBtn.querySelector(".lbl").textContent = "Mic geweigerd — geen probleem";
+    setTimeout(() => { micBtn.querySelector(".lbl").textContent = "Praat tegen de bol"; }, 2600);
+  }
+});
+
+let speechEnv = 0;            // doelwaarde vanuit typwriter
+function autonomousVoice(t){
+  // spraak-achtig ritme: lettergrepen ~4Hz, zinnen ~0.22Hz, pauzes
+  const syll = Math.max(0, Math.sin(t * 7.2) * 0.55 + Math.sin(t * 11.7) * 0.3);
+  const phrase = Math.max(0, Math.sin(t * 0.55) * 0.9 + 0.25);
+  return Math.min(1, syll * phrase * 0.9 + speechEnv * 0.7);
+}
+function readMic(){
+  analyser.getByteFrequencyData(audioData);
+  let sum = 0;
+  const n = Math.min(80, audioData.length);
+  for (let i = 2; i < n; i++) sum += audioData[i];
+  return Math.min(1, (sum / n) / 90);
+}
+
+/* ---------- typwriter: woorden ontstaan uit de bol ---------- */
+const script = [
+  { who: "caller", text: "…gaat over. Hugo neemt op." },
+  { who: "hugo",   text: "Goedendag, met Hugo van Auto Centrum Utrecht. Waarmee kan ik u helpen?" },
+  { who: "caller", text: "Ik wil graag een proefrit in de grijze ID.4." },
+  { who: "hugo",   text: "Leuk! Donderdag om 14:00 is er plek. Zal ik die voor u vastzetten?" },
+  { who: "caller", text: "Ja, graag." },
+  { who: "hugo",   text: "Genoteerd. U ontvangt zo de bevestiging. Tot donderdag!" }
+];
+const sayHugo = document.getElementById("sayHugo");
+const sayCaller = document.getElementById("sayCaller");
+let scriptIdx = 0, typing = false, speechTimer = null;
+
+function placeBubble(el, who){
+  // rond de bol positioneren (bol staat in hero rechtsboven-ish)
+  const cx = window.innerWidth * (isMobile ? 0.5 : 0.66);
+  const cy = window.innerHeight * (isMobile ? 0.32 : 0.42);
+  const r = Math.min(window.innerWidth, window.innerHeight) * (isMobile ? 0.26 : 0.24);
+  const ang = (who === "hugo" ? -0.5 : 2.6) + (Math.random() - 0.5) * 0.7;
+  const x = cx + Math.cos(ang) * r * 1.25;
+  const y = cy + Math.sin(ang) * r * 1.1;
+  el.style.left = Math.max(12, Math.min(x, window.innerWidth - 340)) + "px";
+  el.style.top = Math.max(70, Math.min(y, window.innerHeight - 160)) + "px";
+}
+
+function typeLine(entry, done){
+  const el = entry.who === "hugo" ? sayHugo : sayCaller;
+  const other = entry.who === "hugo" ? sayCaller : sayHugo;
+  const txt = el.querySelector(".txt");
+  placeBubble(el, entry.who);
+  txt.textContent = "";
+  el.style.opacity = 0;
+  const fadeIn = () => { el.style.transition = "opacity .5s ease"; el.style.opacity = 1; };
+  fadeIn();
+  if (reduced) {
+    txt.textContent = entry.text;
+    speechTimer = setTimeout(done, 2600);
+    return;
+  }
+  let i = 0;
+  typing = true;
+  function tick(){
+    if (i <= entry.text.length){
+      txt.textContent = entry.text.slice(0, i);
+      // bol "spreekt" mee als Hugo typt
+      speechEnv = entry.who === "hugo" ? 0.55 + Math.random() * 0.35 : 0.12;
+      i++;
+      speechTimer = setTimeout(tick, 34 + Math.random() * 40);
+    } else {
+      typing = false;
+      speechEnv = 0;
+      speechTimer = setTimeout(() => {
+        el.style.opacity = 0;
+        if (other) other.style.opacity = 0;
+        setTimeout(done, 500);
+      }, 1900);
+    }
+  }
+  tick();
+}
+function runScript(){
+  typeLine(script[scriptIdx], () => {
+    scriptIdx = (scriptIdx + 1) % script.length;
+    // korte adempauze tussen zinnen
+    speechTimer = setTimeout(runScript, scriptIdx === 0 ? 3500 : 500);
+  });
+}
+// alleen tonen zolang we in/nabij de hero zijn
+let heroVisible = true;
+const heroEl = document.getElementById("hero");
+new IntersectionObserver((en) => {
+  heroVisible = en[0].isIntersecting;
+  document.getElementById("speech").style.opacity = heroVisible ? 1 : 0;
+  document.getElementById("speech").style.transition = "opacity .5s ease";
+}, { threshold: 0.25 }).observe(heroEl);
+setTimeout(runScript, 1800);
+
+/* ---------- resize / visibility ---------- */
+function onResize(){
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, DPR_CAP));
+}
+window.addEventListener("resize", onResize);
+
+let running = true, rafId = 0;
+document.addEventListener("visibilitychange", () => {
+  running = !document.hidden;
+  if (running) { clock.getDelta(); rafId = requestAnimationFrame(loop); }
+  else cancelAnimationFrame(rafId);
+});
+
+/* ---------- render loop ---------- */
+const clock = new THREE.Clock();
+const lerp = (a, b, k) => a + (b - a) * k;
+
+function loop(){
+  if (!running) return;
+  rafId = requestAnimationFrame(loop);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.elapsedTime;
+  const k = 1 - Math.pow(0.0015, dt); // framerate-onafhankelijke lerp
+
+  // state -> target
+  for (const key of ["x","y","scale","amp","freq","hue","iri","split","rotSpeed"]) {
+    state[key] = lerp(state[key], target[key], k);
+  }
+
+  // audio-niveau
+  let level;
+  if (micLive && analyser) level = readMic();
+  else if (reduced) level = 0.08;
+  else level = autonomousVoice(t);
+  uniforms.uAudio.value = lerp(uniforms.uAudio.value, level, 0.25);
+
+  // ademen
+  const breath = reduced ? 1 : 1 + Math.sin(t * 0.9) * 0.02;
+
+  uniforms.uTime.value = reduced ? 8.0 : t;
+  uniforms.uAmp.value = state.amp * (reduced ? 0.4 : 1);
+  uniforms.uFreq.value = state.freq;
+  uniforms.uBreath.value = breath;
+  uniforms.uHueShift.value = state.hue + (reduced ? 0 : t * 0.008);
+  uniforms.uIriStrength.value = state.iri;
+  uniforms.uMouse.value.lerp(mouse, 0.06);
+
+  orb.position.x = state.x + (reduced ? 0 : mouse.x * 0.12);
+  orb.position.y = state.y + (reduced ? 0 : mouse.y * 0.1);
+  orb.scale.setScalar(state.scale * (1 - state.split * 0.55));
+  if (!reduced) orb.rotation.y += dt * state.rotSpeed;
+
+  // satellieten: uit de bol geboren bij split
+  const s = state.split;
+  sats.position.copy(orb.position);
+  sats.children.forEach((m, i) => {
+    const a = m.userData.angle + (reduced ? 0 : t * 0.18);
+    const r = 1.15 * state.scale * s + 0.001;
+    m.position.set(Math.cos(a) * r * 1.35, Math.sin(a) * r * 0.75, Math.sin(a * 2.0) * 0.3 * s);
+    m.scale.setScalar(Math.max(0.001, 0.22 * state.scale * s));
+    m.visible = s > 0.004; // niet renderen zolang de satellieten onzichtbaar zijn (hero + meeste secties)
+    const u = satUniformsList[i];
+    u.uTime.value = uniforms.uTime.value + i * 3.7;
+    u.uAudio.value = uniforms.uAudio.value * 0.7;
+    u.uHueShift.value = state.hue + i * 0.13;
+    u.uBreath.value = breath;
+  });
+
+  renderer.render(scene, camera);
+}
+rafId = requestAnimationFrame(loop);
+
+// WebGL context-verlies -> nette fallback
+renderer.domElement.addEventListener("webglcontextlost", (e) => {
+  e.preventDefault();
+  cancelAnimationFrame(rafId);
+  enableCssFallback();
+}, false);
+
+} // einde renderer-guard
+</script>
+
+<!-- vangnet: als de module (import map / three-CDN) faalt, CSS-orb tonen -->
+<script>
+window.addEventListener("load", function(){
+  setTimeout(function(){
+    var canvas = document.querySelector("#stage canvas");
+    if (!canvas && !document.body.classList.contains("no-webgl")) {
+      document.body.classList.add("no-webgl");
+      var mb = document.getElementById("micBtn");
+      if (mb) mb.classList.add("hidden");
+    }
+  }, 2500);
+});
+</script>
+
+</body>
+</html>
