@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Vervang REPLACE-MET-JE-DOMEIN door je echte domein zodra dat live is
-Sitemap: https://REPLACE-MET-JE-DOMEIN/sitemap.xml
+Sitemap: https://hugoai.nl/sitemap.xml

@@ -47,7 +47,11 @@ Vanaf nu: **elke `git push` = de site update automatisch live.** Nooit meer hand
    ```
 3. De site update vanzelf binnen ~1 minuut.
 
-## Nog te doen voor complete SEO
-- [ ] `REPLACE-MET-JE-DOMEIN` vervangen in `robots.txt` en `sitemap.xml` door je echte domein.
-- [ ] `og:image` en `twitter:image` in `index.html` op de **volledige** URL zetten (bv. `https://hugoai.nl/og-image.png`) — sommige platforms eisen een absolute URL.
-- [ ] Site aanmelden bij [Google Search Console](https://search.google.com/search-console) en je sitemap indienen.
+## SEO — status
+Live op **https://hugoai.nl** (Vercel, auto-deploy).
+- [x] `robots.txt` + `sitemap.xml` met echte domein `hugoai.nl`.
+- [x] `og:image` / `twitter:image` op volledige URL + `canonical` + `og:url`.
+- [x] Organization-schema (JSON-LD) toegevoegd voor merkherkenning bij Google.
+- [ ] Site aanmelden bij [Google Search Console](https://search.google.com/search-console) en sitemap indienen.
+- [ ] (optioneel) Google Bedrijfsprofiel aanmaken voor branded search.
+- [ ] (optioneel) `www.hugoai.nl` toevoegen in Vercel.
