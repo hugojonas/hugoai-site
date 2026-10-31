@@ -1,16 +1,22 @@
 # HugoAI — website
 
-De marketing-site van HugoAI: één self-contained pagina (`index.html`) met de iriserende WebGL stem-orb, cinematic scroll en een werkend contactformulier (Formspree).
+De marketing-site van HugoAI: een homepage met live demo (`index.html`), een Over-pagina (`over.html`) en een werkend contactformulier (Formspree). Geen build-stap, geen frameworks.
 
 Dit is een **losse, schone repo met alléén de website** — bewust los van het privé HugoAI-project (server/prompts), zodat je dit veilig publiek kunt hosten.
 
 ## Bestanden
 | Bestand | Wat |
 |---|---|
-| `index.html` | De hele website (CSS + JS inline; Three.js/GSAP/Lenis via CDN) |
-| `og-image.png` | Preview-afbeelding bij delen (1200×630) |
+| `index.html` | Homepage: demo-blok, samenvatting, branches, aanvraagformulier (JS inline) |
+| `over.html` | Over HugoAI en de werkwijze |
+| `stijl.css` | Gedeelde stijl voor beide pagina's (fonts via Google Fonts) |
+| `kunstbeeld.png` | Kunstbeeld van het telefoonsnoer, alleen bovenaan de homepage |
+| `vlak-petrol.png`, `vlak-zand.png` | Geschilderde korrelvlakken achter de telefoon en de samenvatting |
+| `og-image.png` | Oude preview-afbeelding (oud ontwerp, wordt nog niet gebruikt; komt een nieuwe) |
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
-| `sitemap.xml` | Sitemap (één pagina) |
+| `sitemap.xml` | Sitemap (homepage + over) |
+
+> De Garage-demo belt echt: hij verbindt via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden.
 
 > Contactformulier post naar Formspree: `https://formspree.io/f/xrewjzvl`.
 
@@ -41,7 +47,7 @@ Vanaf nu: **elke `git push` = de site update automatisch live.** Nooit meer hand
 ---
 
 ## Iets wijzigen op de site
-1. Pas `index.html` aan.
+1. Pas `index.html`, `over.html` of `stijl.css` aan.
 2. ```bash
    git add -A && git commit -m "beschrijving" && git push
    ```
@@ -50,8 +56,8 @@ Vanaf nu: **elke `git push` = de site update automatisch live.** Nooit meer hand
 ## SEO — status
 Live op **https://hugoai.nl** (Vercel, auto-deploy).
 - [x] `robots.txt` + `sitemap.xml` met echte domein `hugoai.nl`.
-- [x] `og:image` / `twitter:image` op volledige URL + `canonical` + `og:url`.
-- [x] Organization-schema (JSON-LD) toegevoegd voor merkherkenning bij Google.
+- [ ] Nieuw ontwerp (31 okt 2026) mist nog: `canonical`, `og:`/`twitter:`-tags, Organization-schema, favicon en een nieuwe `og-image.png` in de nieuwe stijl.
+- [ ] Privacyverklaring (`privacy.html`) + melding "Het gesprek wordt opgenomen" bij de Garage-demo.
 - [ ] Site aanmelden bij [Google Search Console](https://search.google.com/search-console) en sitemap indienen.
 - [ ] (optioneel) Google Bedrijfsprofiel aanmaken voor branded search.
 - [ ] (optioneel) `www.hugoai.nl` toevoegen in Vercel.

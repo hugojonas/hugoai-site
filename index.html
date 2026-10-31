@@ -3,1129 +3,556 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HugoAI — Jouw telefoon, nooit meer gemist</title>
-<meta name="description" content="Hugo neemt op als jij het druk hebt. Een Nederlandse AI-stem die klinkt als een mens en afspraken direct in je agenda zet.">
-<meta name="theme-color" content="#f6f3ee">
-<meta name="author" content="HugoAI">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><radialGradient id='g' cx='35%25' cy='30%25'><stop offset='0%25' stop-color='%23b9f3d8'/><stop offset='45%25' stop-color='%23a9c7ff'/><stop offset='100%25' stop-color='%23ffb7d9'/></radialGradient></defs><circle cx='16' cy='16' r='14' fill='url(%23g)'/></svg>">
-<link rel="canonical" href="https://hugoai.nl/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="HugoAI">
-<meta property="og:locale" content="nl_NL">
-<meta property="og:url" content="https://hugoai.nl/">
-<meta property="og:title" content="HugoAI — Jouw telefoon, nooit meer gemist">
-<meta property="og:description" content="Hugo neemt op als jij het druk hebt. Een Nederlandse AI-stem die klinkt als een mens en afspraken direct in je agenda zet.">
-<meta property="og:image" content="https://hugoai.nl/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="HugoAI — Jouw telefoon, nooit meer gemist">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="HugoAI — Jouw telefoon, nooit meer gemist">
-<meta name="twitter:description" content="Een Nederlandse AI-stem die opneemt, menselijk klinkt en afspraken direct inplant.">
-<meta name="twitter:image" content="https://hugoai.nl/og-image.png">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "HugoAI",
-  "url": "https://hugoai.nl/",
-  "logo": "https://hugoai.nl/og-image.png",
-  "description": "Nederlandse AI-telefonist die opneemt als jij het druk hebt, menselijk klinkt en afspraken direct in je agenda zet.",
-  "areaServed": "NL",
-  "knowsLanguage": "nl-NL"
-}
-</script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
-
-:root{
-  --ink:#211d18;
-  --ink-soft:#6f675c;
-  --paper:#f6f3ee;
-  --paper-deep:#efeae2;
-  --line:rgba(33,29,24,.1);
-  --iri-a:#ffb7d9;
-  --iri-b:#a9c7ff;
-  --iri-c:#b9f3d8;
-  --iri-d:#ffe3a9;
-  --radius:22px;
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
-html.lenis,html.lenis body{height:auto}
-.lenis.lenis-smooth{scroll-behavior:auto!important}
-
-body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--paper);
-  color:var(--ink);
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  line-height:1.55;
-}
-
-::selection{background:var(--iri-b);color:var(--ink)}
-
-h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;font-weight:400;letter-spacing:-.015em;line-height:1.06}
-
-/* ---------- canvas stage ---------- */
-#stage{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-}
-#stage canvas{display:block;width:100%;height:100%}
-
-/* soft ambient wash behind everything */
-.wash{
-  position:fixed;inset:-20%;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(45% 40% at 68% 30%, rgba(255,183,217,.22), transparent 70%),
-    radial-gradient(50% 45% at 25% 70%, rgba(169,199,255,.20), transparent 70%),
-    radial-gradient(40% 40% at 60% 85%, rgba(185,243,216,.16), transparent 70%);
-  filter:blur(10px);
-}
-
-/* ---------- CSS fallback orb (when WebGL is unavailable) ---------- */
-#cssOrb{
-  position:fixed;z-index:1;pointer-events:none;display:none;
-  width:min(58vmin,540px);height:min(58vmin,540px);
-  left:50%;top:50%;transform:translate(-50%,-52%);
-  border-radius:50%;
-}
-body.no-webgl #cssOrb{display:block}
-body.no-webgl #stage{display:none}
-#cssOrb .layer{position:absolute;inset:0;border-radius:50%}
-#cssOrb .l1{
-  background:conic-gradient(from 210deg,
-    #ffd9ec, #c9dcff, #c9f6e2, #fff0c9, #ffd0e6, #cfe0ff, #ffd9ec);
-  animation:orbSpin 22s linear infinite;
-  filter:blur(2px) saturate(1.15);
-}
-#cssOrb .l2{
-  inset:6%;
-  background:radial-gradient(circle at 34% 30%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 26%, rgba(255,255,255,0) 55%),
-             radial-gradient(circle at 68% 74%, rgba(169,199,255,.55), transparent 60%);
-  mix-blend-mode:screen;
-}
-#cssOrb .l3{
-  inset:-4%;
-  background:radial-gradient(circle, transparent 58%, rgba(255,255,255,.55) 72%, transparent 76%);
-  animation:orbBreathe 5.5s ease-in-out infinite;
-}
-@keyframes orbSpin{to{transform:rotate(360deg)}}
-@keyframes orbBreathe{0%,100%{transform:scale(.985)}50%{transform:scale(1.02)}}
-@media (prefers-reduced-motion:reduce){
-  #cssOrb .l1,#cssOrb .l3{animation:none}
-}
-
-/* ---------- content ---------- */
-main{position:relative;z-index:3}
-
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:20;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px clamp(20px,4vw,56px);
-  transition:background .4s ease, backdrop-filter .4s ease;
-}
-nav.scrolled{background:rgba(246,243,238,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.logo{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:500;display:flex;align-items:center;gap:.55rem;color:var(--ink);text-decoration:none}
-.logo .dot{
-  width:14px;height:14px;border-radius:50%;
-  background:conic-gradient(from 40deg,var(--iri-a),var(--iri-b),var(--iri-c),var(--iri-d),var(--iri-a));
-  box-shadow:0 0 12px rgba(169,199,255,.8);
-}
-.btn{
-  display:inline-flex;align-items:center;gap:.5rem;
-  font-family:'Inter',sans-serif;font-weight:600;font-size:.92rem;
-  padding:.8rem 1.5rem;border-radius:999px;border:none;cursor:pointer;
-  text-decoration:none;transition:transform .25s ease, box-shadow .25s ease;
-}
-.btn-dark{background:var(--ink);color:var(--paper)}
-.btn-dark:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(33,29,24,.22)}
-.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn-ghost:hover{border-color:var(--ink)}
-
-section{position:relative;padding:0 clamp(20px,5vw,64px)}
-.wrap{max-width:1180px;margin:0 auto}
-
-/* hero */
-#hero{height:100vh;min-height:640px;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:8vh}
-#hero .wrap{width:100%}
-.hero-kicker{
-  font-size:.8rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--ink-soft);margin-bottom:1.1rem;
-}
-.hero-title{
-  font-size:clamp(2.6rem,7.2vw,6.2rem);
-  max-width:12ch;
-}
-.hero-title em{font-style:italic;font-weight:300;
-  background:linear-gradient(100deg,#c96fa4,#5f83d8 45%,#3fae86);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero-sub{max-width:44ch;color:var(--ink-soft);font-size:clamp(1rem,1.4vw,1.15rem);margin-top:1.4rem}
-.hero-cta{display:flex;gap:.9rem;margin-top:2.1rem;flex-wrap:wrap}
-.hero-scrollhint{
-  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
-  font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft);
-}
-
-/* speech lines emerging from the orb */
-#speech{
-  position:fixed;z-index:4;inset:0;pointer-events:none;
-}
-.say{
-  position:absolute;max-width:min(320px,72vw);
-  font-family:'Fraunces',serif;font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.35;
-  color:var(--ink);opacity:0;
-  padding:.7rem 1.1rem;border-radius:18px;
-  background:rgba(255,255,255,.55);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.8);
-  box-shadow:0 10px 40px rgba(120,110,160,.12);
-}
-.say .caret{display:inline-block;width:.55ch;color:#8f7bd8;font-weight:600}
-.say.caller{font-family:'Inter',sans-serif;font-size:clamp(.85rem,1.3vw,1rem);color:var(--ink-soft);background:rgba(246,243,238,.7)}
-
-/* mic pill */
-#micBtn{
-  position:fixed;z-index:21;right:clamp(18px,3vw,44px);bottom:clamp(18px,3vw,36px);
-  display:inline-flex;align-items:center;gap:.55rem;
-  font-size:.82rem;font-weight:600;color:var(--ink);
-  background:rgba(255,255,255,.7);backdrop-filter:blur(10px);
-  border:1px solid var(--line);border-radius:999px;padding:.62rem 1.05rem;cursor:pointer;
-  transition:border-color .25s, transform .25s;
-}
-#micBtn:hover{border-color:var(--ink);transform:translateY(-2px)}
-#micBtn .ring{width:9px;height:9px;border-radius:50%;background:#c9c2b7;transition:background .3s, box-shadow .3s}
-#micBtn.live .ring{background:#3fae86;box-shadow:0 0 0 4px rgba(63,174,134,.2)}
-#micBtn.hidden{display:none}
-
-/* generic section headings */
-.sec-head{padding-top:16vh;max-width:640px}
-.sec-eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:1rem}
-.sec-title{font-size:clamp(2rem,4.4vw,3.6rem)}
-.sec-sub{color:var(--ink-soft);margin-top:1.1rem;font-size:1.05rem;max-width:46ch}
-
-/* how it works — pinned shot */
-#how{min-height:100vh;padding-bottom:14vh}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,28px);margin-top:9vh}
-.step{
-  background:rgba(255,255,255,.6);backdrop-filter:blur(6px);
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:clamp(20px,2.4vw,34px);
-}
-.step .num{
-  font-family:'Fraunces',serif;font-size:.95rem;color:var(--ink-soft);
-  display:inline-flex;width:2.2rem;height:2.2rem;align-items:center;justify-content:center;
-  border:1px solid var(--line);border-radius:50%;margin-bottom:1.2rem;
-}
-.step h3{font-size:1.45rem;margin-bottom:.55rem}
-.step p{color:var(--ink-soft);font-size:.95rem}
-
-/* features */
-#features{min-height:100vh;padding-bottom:14vh}
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);margin-top:8vh}
-.feat{
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:clamp(20px,2.2vw,30px);
-  background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(255,255,255,.35));
-  position:relative;overflow:hidden;
-}
-.feat::after{
-  content:"";position:absolute;inset:0;opacity:0;transition:opacity .5s ease;
-  background:radial-gradient(120% 90% at 20% 0%,rgba(255,183,217,.18),transparent 55%),
-             radial-gradient(120% 90% at 90% 100%,rgba(169,199,255,.2),transparent 55%);
-  pointer-events:none;
-}
-.feat:hover::after{opacity:1}
-.feat .glyph{
-  width:38px;height:38px;border-radius:12px;margin-bottom:1.1rem;
-  background:conic-gradient(from 220deg,var(--iri-a),var(--iri-b),var(--iri-c),var(--iri-d),var(--iri-a));
-  opacity:.85;filter:saturate(1.05);
-}
-.feat h3{font-size:1.25rem;margin-bottom:.45rem}
-.feat p{color:var(--ink-soft);font-size:.92rem}
-
-/* sectors */
-#sectors{min-height:90vh;padding-bottom:14vh}
-.sector-row{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,22px);margin-top:7vh}
-.sector{
-  border-radius:var(--radius);padding:clamp(24px,2.6vw,36px);
-  border:1px solid var(--line);min-height:220px;display:flex;flex-direction:column;justify-content:space-between;
-  background:rgba(255,255,255,.55);
-}
-.sector.live{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.sector.live p{color:rgba(246,243,238,.68)}
-.sector h3{font-size:1.6rem}
-.sector p{color:var(--ink-soft);font-size:.92rem;margin-top:.5rem}
-.tag{
-  align-self:flex-start;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-  padding:.38rem .8rem;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);
-}
-.sector.live .tag{border-color:rgba(246,243,238,.35);color:#b9f3d8}
-.tag.pulse{position:relative}
-.tag.pulse::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#3fae86;margin-right:.5rem;vertical-align:1px;box-shadow:0 0 0 0 rgba(63,174,134,.5);animation:tagPulse 2.2s infinite}
-@keyframes tagPulse{70%{box-shadow:0 0 0 8px rgba(63,174,134,0)}100%{box-shadow:0 0 0 0 rgba(63,174,134,0)}}
-
-/* big CTA */
-#cta{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
-#cta .inner{max-width:760px;padding:14vh 0}
-#cta h2{font-size:clamp(2.4rem,6vw,5rem)}
-#cta p{color:var(--ink-soft);margin:1.4rem auto 2.4rem;max-width:44ch}
-.confirm-chip{
-  display:inline-flex;align-items:center;gap:.6rem;margin-bottom:2rem;
-  font-size:.86rem;font-weight:600;color:var(--ink);
-  background:rgba(255,255,255,.7);border:1px solid var(--line);
-  padding:.6rem 1.2rem;border-radius:999px;backdrop-filter:blur(8px);
-}
-.confirm-chip svg{width:16px;height:16px;stroke:#3fae86;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
-
-footer{
-  position:relative;z-index:3;
-  border-top:1px solid var(--line);
-  padding:44px clamp(20px,5vw,64px);
-  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
-  color:var(--ink-soft);font-size:.85rem;background:var(--paper);
-}
-footer .logo{font-size:1.1rem}
-
-/* reveals — visible by default, JS opts them into animation */
-.reveal{opacity:1;transform:none}
-body.anim-ready .reveal{opacity:0;transform:translateY(34px)}
-body.anim-ready .reveal.shown{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
-
-@media (max-width:860px){
-  .steps,.feat-grid,.sector-row{grid-template-columns:1fr}
-  #hero{justify-content:flex-end}
-  .hero-scrollhint{display:none}
-  .say{font-size:.95rem}
-}
-@media (prefers-reduced-motion:reduce){
-  .btn,.feat::after{transition:none}
-}
-</style>
+<title>HugoAI — De telefonist die altijd opneemt</title>
+<meta name="description" content="Hugo neemt de telefoon op voor jouw zaak, praat gewoon Nederlands en laat na elk gesprek een samenvatting voor je achter.">
+<meta name="theme-color" content="#f2f1ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stijl.css">
 </head>
 <body>
 
-<div class="wash" aria-hidden="true"></div>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="merk" href="#top"><i></i>HugoAI</a>
+    <nav class="nav-links" aria-label="Hoofdmenu">
+      <a href="#demo">Live demo</a>
+      <a href="#samenvatting">Wat je krijgt</a>
+      <a href="#zaken">Voor jouw zaak</a>
+    </nav>
+    <div class="nav-rechts">
+      <a class="knop knop-rand" href="#aanvragen">Demo aanvragen</a>
+      <a class="knop" href="#demo">Praat met Hugo</a>
+    </div>
+  </div>
+</header>
 
-<!-- WebGL stage -->
-<div id="stage" aria-hidden="true"></div>
+<main id="top">
 
-<!-- CSS fallback orb -->
-<div id="cssOrb" aria-hidden="true">
-  <div class="layer l1"></div>
-  <div class="layer l2"></div>
-  <div class="layer l3"></div>
+<!-- ============ hero ============ -->
+<div class="hero">
+  <img class="hero-beeld" src="kunstbeeld.png" alt="">
+  <div class="wrap">
+    <div class="hero-tekst">
+      <h1>De telefonist die altijd opneemt.</h1>
+      <p class="hero-sub">Hugo is de AI-telefonist die de telefoon van jouw zaak aanneemt. Hij voert het gesprek in natuurlijk Nederlands, beantwoordt vragen, legt afspraken vast en levert na elk gesprek <b>een heldere samenvatting</b>.</p>
+      <div class="hero-knoppen">
+        <a class="knop" href="#demo"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Praat met Hugo</a>
+        <a class="knop knop-rand" href="#aanvragen">Vraag een demo aan</a>
+      </div>
+      <p class="vink"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#141514"/><path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Kosteloze demo, ingericht op jouw zaak.</p>
+    </div>
+  </div>
 </div>
 
-<!-- speech emerging from the orb -->
-<div id="speech" aria-hidden="true">
-  <div class="say caller" id="sayCaller"><span class="txt"></span></div>
-  <div class="say" id="sayHugo"><span class="txt"></span><span class="caret">|</span></div>
-</div>
-
-<nav id="nav">
-  <a class="logo" href="#hero"><span class="dot"></span>Hugo</a>
-  <a class="btn btn-dark" href="#cta">Plan een demo</a>
-</nav>
-
-<button id="micBtn" type="button" aria-label="Laat de bol op je stem reageren">
-  <span class="ring"></span><span class="lbl">Praat tegen de bol</span>
-</button>
-
-<main>
-
-  <section id="hero">
-    <div class="wrap">
-      <p class="hero-kicker reveal">Nederlandse AI-receptionist</p>
-      <h1 class="hero-title reveal">Jouw telefoon,<br><em>nooit meer gemist.</em></h1>
-      <p class="hero-sub reveal">Hugo neemt op als jij het druk hebt. Vloeiend Nederlands, dag en nacht, en de afspraak staat meteen in je agenda.</p>
-      <div class="hero-cta reveal">
-        <a class="btn btn-dark" href="#cta">Hoor Hugo live</a>
-        <a class="btn btn-ghost" href="#how">Hoe het werkt</a>
+<!-- ============ live demo ============ -->
+<section class="demo" id="demo">
+  <div class="wrap demo-raster">
+    <div class="kop in">
+      <span class="mono">[ Live demo ]</span>
+      <h2>Praat met Hugo.</h2>
+      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Stel je vragen over HugoAI, of ervaar hoe hij de telefoon aanneemt voor een garage, restaurant, kapsalon of makelaar.</p>
+      <div class="kies" role="tablist" aria-label="Kies met wie je praat">
+        <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="hugoai"><span>Over HugoAI</span><small>Wat het is en hoe het werkt</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="restaurant"><span>Restaurant</span><small>Voorbeeldrestaurant</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Voorbeeldsalon</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="makelaar"><span>Makelaar</span><small>Voorbeeldmakelaar</small></button>
       </div>
+      <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Wat krijg ik na een gesprek?”</em></p>
+      <p class="verzonnen">De voorbeeldzaken zijn fictief.</p>
     </div>
-    <div class="hero-scrollhint">Scroll</div>
-  </section>
 
-  <section id="how">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="sec-eyebrow reveal">Hoe het werkt</p>
-        <h2 class="sec-title reveal">Drie seconden.<br>Zo snel gaat het.</h2>
-        <p class="sec-sub reveal">Geen menu's, geen wachtmuziek. Een gesprek zoals met je beste medewerker.</p>
+    <div class="podium in" id="podium">
+      <span class="podium-label mono" id="podiumLabel">Voorbeeld · de echte demo komt hier</span>
+      <div class="stem" aria-live="polite">
+        <p class="wie-praat" id="wiePraat">Hugo</p>
+        <p class="zin" id="zin"></p>
       </div>
-      <div class="steps">
-        <div class="step reveal">
-          <span class="num">1</span>
-          <h3>Een klant belt</h3>
-          <p>Buiten openingstijden, tijdens een proefrit, midden in de spits — het maakt niet uit wanneer.</p>
-        </div>
-        <div class="step reveal">
-          <span class="num">2</span>
-          <h3>Hugo neemt op</h3>
-          <p>Binnen één beltoon. Hij begroet, luistert en stelt precies de juiste vragen. In natuurlijk Nederlands.</p>
-        </div>
-        <div class="step reveal">
-          <span class="num">3</span>
-          <h3>De afspraak staat</h3>
-          <p>Direct in jouw agenda, met bevestiging naar de klant. Jij ziet het pas als het al geregeld is.</p>
+      <svg class="snoer" id="snoer" aria-hidden="true"><path id="snoerSchaduw"/><path id="snoerAchter"/><path id="snoerLijn"/></svg>
+      <div class="telefoon">
+        <div class="scherm">
+          <div class="eiland"><span class="naam" id="eilandNaam">Hugo · HugoAI</span><span class="tijd" id="tijd">0:00</span></div>
+          <p class="scherm-status" id="status">// klaar om te bellen</p>
+          <div class="scherm-knoppen knoppen-rust">
+            <button class="pil" id="bel" type="button"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span>Bel Hugo</span></button>
+          </div>
+          <div class="scherm-knoppen knoppen-bellen">
+            <button class="pil" id="dempen" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4"/></svg>Dempen</button>
+            <button class="pil rood" id="ophangen" type="button"><svg viewBox="0 0 24 24" style="transform:rotate(135deg)"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Ophangen</button>
+          </div>
+          <p class="scherm-noot" id="schermNoot">Dit gesprek is nagespeeld.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="features">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="sec-eyebrow reveal">Waarom Hugo</p>
-        <h2 class="sec-title reveal">Alles wat een topreceptionist kan.<br>Zonder pauze.</h2>
-      </div>
-      <div class="feat-grid">
-        <div class="feat reveal"><div class="glyph"></div><h3>24/7 bereikbaar</h3><p>Ook 's avonds, in het weekend en midden in de drukte. Elke oproep beantwoord, elke klant te woord gestaan.</p></div>
-        <div class="feat reveal"><div class="glyph"></div><h3>Vloeiend Nederlands</h3><p>Natuurlijk Nederlands, zonder robotpauzes. Hugo praat zoals jouw klanten praten.</p></div>
-        <div class="feat reveal"><div class="glyph"></div><h3>Nooit een klant gemist</h3><p>Geen voicemail, geen wachtrij, geen gemiste kans. Elke beller krijgt meteen een echt gesprek.</p></div>
-        <div class="feat reveal"><div class="glyph"></div><h3>Boekt direct in je agenda</h3><p>Proefritten, behandelingen, bezichtigingen — meteen ingepland en bevestigd, terwijl de klant nog aan de lijn is.</p></div>
-        <div class="feat reveal"><div class="glyph"></div><h3>Werkt in elke sector</h3><p>Hugo leert jouw aanbod, prijzen en toon. Binnen een dag praat hij als iemand van je eigen team.</p></div>
-        <div class="feat reveal"><div class="glyph"></div><h3>Klinkt menselijk</h3><p>Warm, geduldig en to the point. En vraagt een beller of het een AI is? Dan is Hugo daar gewoon eerlijk over.</p></div>
+<!-- ============ samenvatting ============ -->
+<section class="samen" id="samenvatting">
+  <div class="wrap samen-raster">
+    <div class="podium in">
+      <span class="podium-label mono">Voorbeeld</span>
+      <div class="brief">
+        <div class="brief-kop">
+          <i>H</i>
+          <div><strong>Samenvatting van Hugo</strong><small>Gesprek van 2 min 14 s</small></div>
+          <span class="mono">Vandaag 10:42</span>
+        </div>
+        <dl>
+          <div><dt>Beller</dt><dd>Sanne de Vries</dd></div>
+          <div><dt>Waarvoor</dt><dd>APK voor haar Volkswagen Polo</dd></div>
+          <div><dt>Afgesproken</dt><dd>Donderdag 08:30, auto brengen</dd></div>
+          <div><dt>Let op</dt><dd class="let">Vroeg ook naar winterbanden. Wil graag een prijs.</dd></div>
+        </dl>
       </div>
     </div>
-  </section>
-
-  <section id="sectors">
-    <div class="wrap">
-      <div class="sec-head">
-        <p class="sec-eyebrow reveal">Sectoren</p>
-        <h2 class="sec-title reveal">Gebouwd voor jouw branche</h2>
-        <p class="sec-sub reveal">Eén Hugo, verschillende vakkennis. Vandaag live bij autobedrijven — de rest volgt snel.</p>
-      </div>
-      <div class="sector-row">
-        <div class="sector live reveal">
-          <span class="tag pulse">Nu live</span>
-          <div><h3>Autodealer</h3><p>Proefritten, occasionvragen, APK-afspraken. Hugo kent het aanbod op kenteken.</p></div>
-        </div>
-        <div class="sector reveal">
-          <span class="tag">Binnenkort</span>
-          <div><h3>Tandarts</h3><p>Spoedklachten filteren, controles plannen, no-shows terugbellen.</p></div>
-        </div>
-        <div class="sector reveal">
-          <span class="tag">Binnenkort</span>
-          <div><h3>Makelaar</h3><p>Bezichtigingen inplannen en woningvragen beantwoorden — ook op zaterdag.</p></div>
-        </div>
+    <div class="kop in">
+      <span class="mono">[ Na elk gesprek ]</span>
+      <h2>Jij werkt door. Hugo houdt bij wie er belde.</h2>
+      <p>Elk gesprek eindigt in een beknopte samenvatting: wie er belde, met welke vraag, en welke afspraken er zijn gemaakt. Zo houd je overzicht zonder zelf de telefoon op te nemen.</p>
+      <div class="punten">
+        <div class="punt"><h3>Altijd bereikbaar</h3><p>Hugo neemt elk gesprek direct aan, ook op piekmomenten, tijdens de lunch en buiten openingstijden. Geen wachtrij, geen voicemail.</p></div>
+        <div class="punt"><h3>Natuurlijk Nederlands</h3><p>Hugo spreekt vloeiend en houdt het gesprek gaande, ook als een beller tussendoor iets vraagt. Wie vraagt of hij met een computer spreekt, krijgt een eerlijk antwoord.</p></div>
+        <div class="punt"><h3>Afgestemd op jouw zaak</h3><p>Openingstijden, diensten, prijzen en aanbod: Hugo werkt met de gegevens van jouw zaak en voegt niets toe wat er niet in staat.</p></div>
+        <div class="punt"><h3>Niets blijft liggen</h3><p>Vragen die Hugo niet kan beantwoorden, legt hij vast in de samenvatting, met naam en nummer van de beller, zodat je gericht kunt opvolgen.</p></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <style>
-    .demo-form{max-width:560px;margin:clamp(20px,4vh,40px) auto 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
-    .demo-form .field{display:flex;flex-direction:column;gap:6px}
-    .demo-form .field-wide{grid-column:1/-1}
-    .demo-form label{font-size:.82rem;color:var(--ink-soft);font-weight:500}
-    .demo-form label span{opacity:.6}
-    .demo-form input,.demo-form textarea{font:inherit;font-size:.98rem;color:var(--ink);background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-    .demo-form input:focus,.demo-form textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(33,29,24,.08)}
-    .demo-form textarea{resize:vertical;min-height:70px}
-    .demo-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
-    .demo-form #demoSubmit{grid-column:1/-1;justify-self:center;margin-top:6px;cursor:pointer;border:none}
-    .demo-form #demoSubmit[disabled]{opacity:.6;cursor:progress}
-    .form-status{grid-column:1/-1;text-align:center;font-size:.92rem;min-height:1.2em;margin:2px 0 0}
-    .form-status.ok{color:#2f8f68}
-    .form-status.err{color:#b4472e}
-    @media(max-width:560px){.demo-form{grid-template-columns:1fr}}
-  </style>
-  <section id="cta">
-    <div class="inner">
-      <div class="confirm-chip reveal">
-        <svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
-        Afspraak bevestigd — donderdag 14:00
-      </div>
-      <h2 class="reveal">Laat Hugo één dag<br>jouw telefoon doen.</h2>
-      <p class="reveal">Plan een korte demo. Laat je gegevens achter, dan bellen we je terug — en hoor je Hugo zelf.</p>
-
-      <form id="demoForm" class="demo-form reveal" novalidate>
-        <div class="field">
-          <label for="f-naam">Naam</label>
-          <input id="f-naam" name="naam" type="text" autocomplete="name" required>
-        </div>
-        <div class="field">
-          <label for="f-bedrijf">Bedrijf</label>
-          <input id="f-bedrijf" name="bedrijf" type="text" autocomplete="organization">
-        </div>
-        <div class="field">
-          <label for="f-email">E-mail</label>
-          <input id="f-email" name="email" type="email" autocomplete="email" required>
-        </div>
-        <div class="field">
-          <label for="f-tel">Telefoon</label>
-          <input id="f-tel" name="telefoon" type="tel" autocomplete="tel">
-        </div>
-        <div class="field field-wide">
-          <label for="f-bericht">Waar mag Hugo mee helpen? <span>(optioneel)</span></label>
-          <textarea id="f-bericht" name="bericht" rows="3"></textarea>
-        </div>
-        <input type="hidden" name="_subject" value="🔔 Nieuwe demo-aanvraag via HugoAI">
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
-        <button type="submit" class="btn btn-dark" id="demoSubmit">Plan mijn demo</button>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-      </form>
+<!-- ============ zaken ============ -->
+<section class="zaken" id="zaken">
+  <div class="wrap">
+    <div class="kop in">
+      <span class="mono">[ Voor elke zaak die gebeld wordt ]</span>
+      <h2>Hugo leert jouw zaak kennen.</h2>
     </div>
-  </section>
+    <div class="zaken-rij">
+      <div class="zaak in"><span class="mono">Garage</span><q>Kan mijn auto donderdag voor de APK?</q><p>APK, onderhoud of een proefrit: Hugo legt de afspraak vast, inclusief kenteken en contactgegevens.</p><a class="bel-zaak" href="#demo" data-zaak="garage">Bel deze zaak →</a></div>
+      <div class="zaak in"><span class="mono">Restaurant</span><q>Hebben jullie zaterdag nog een tafel voor vier?</q><p>Reserveringen, groepsgrootte en dieetwensen worden direct en volledig genoteerd.</p><a class="bel-zaak" href="#demo" data-zaak="restaurant">Bel deze zaak →</a></div>
+      <div class="zaak in"><span class="mono">Kapsalon</span><q>Kan ik morgen nog geknipt worden?</q><p>Hugo stemt een tijdstip af en legt de gewenste behandeling vast.</p><a class="bel-zaak" href="#demo" data-zaak="kapsalon">Bel deze zaak →</a></div>
+      <div class="zaak in"><span class="mono">Makelaar</span><q>Is het huis aan de Lindelaan nog te koop?</q><p>Hugo informeert over het aanbod en registreert geïnteresseerden voor een bezichtiging.</p><a class="bel-zaak" href="#demo" data-zaak="makelaar">Bel deze zaak →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ aanvragen ============ -->
+<section id="aanvragen">
+  <div class="wrap aanvraag-raster">
+    <div class="kop in">
+      <span class="mono">[ Demo aanvragen ]</span>
+      <h2>Hoor Hugo met de naam van jouw zaak.</h2>
+      <p>Laat je gegevens achter. We stellen een demo samen met de naam, openingstijden en het aanbod van jouw zaak, en sturen je de link per e-mail.</p>
+      <p id="prijzen">De prijs stemmen we af op jouw zaak en het aantal gesprekken dat binnenkomt.</p>
+    </div>
+    <form class="form in" id="demoForm" novalidate>
+      <div class="veld"><label for="f-naam">Je naam</label><input id="f-naam" name="naam" type="text" autocomplete="name" required></div>
+      <div class="veld"><label for="f-zaak">Naam van je zaak</label><input id="f-zaak" name="zaak" type="text" autocomplete="organization" required></div>
+      <div class="veld"><label for="f-email">E-mailadres</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="veld"><label for="f-site">Website <small>(als je die hebt)</small></label><input id="f-site" name="website" type="text" inputmode="url" placeholder="www.jouwzaak.nl"></div>
+      <input type="hidden" name="_subject" value="Nieuwe demo-aanvraag via hugoai.nl">
+      <div class="hp" aria-hidden="true"><label>Laat leeg <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+      <button class="knop" id="demoSubmit" type="submit">Stuur mij een demo</button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      <p class="form-noot">Je gegevens gebruiken we uitsluitend om je demo samen te stellen en te versturen.</p>
+    </form>
+  </div>
+</section>
 
 </main>
 
-<footer>
-  <a class="logo" href="#hero"><span class="dot"></span>Hugo</a>
-  <span>© 2026 HugoAI — Utrecht, Nederland</span>
-  <span>Gemaakt met een stem die nooit slaapt.</span>
+<footer class="voet">
+  <div class="wrap voet-raster">
+    <div class="voet-merk">
+      <a class="merk" href="#top"><i></i>HugoAI</a>
+      <p>De telefonist die altijd opneemt.</p>
+      <a class="knop" href="#demo">Praat met Hugo</a>
+    </div>
+    <nav class="voet-kolom" aria-label="Product">
+      <p class="mono">Product</p>
+      <a href="#demo">Live demo</a>
+      <a href="#samenvatting">Samenvatting na elk gesprek</a>
+      <a href="over.html#werkwijze">Hoe het werkt</a>
+      <a href="#aanvragen">Prijzen</a>
+    </nav>
+    <nav class="voet-kolom" aria-label="Branches">
+      <p class="mono">Branches</p>
+      <a class="kies-zaak" href="#demo" data-zaak="garage">Garages</a>
+      <a class="kies-zaak" href="#demo" data-zaak="restaurant">Restaurants</a>
+      <a class="kies-zaak" href="#demo" data-zaak="kapsalon">Kapsalons</a>
+      <a class="kies-zaak" href="#demo" data-zaak="makelaar">Makelaars</a>
+    </nav>
+    <nav class="voet-kolom" aria-label="Bedrijf">
+      <p class="mono">Bedrijf</p>
+      <a href="over.html">Over HugoAI</a>
+      <a href="mailto:hugo@hugoai.nl">Contact</a>
+      <a href="#aanvragen">Demo aanvragen</a>
+    </nav>
+  </div>
+  <div class="wrap voet-onder">
+    <span>© <span id="jaar">2026</span> HugoAI</span>
+    <a href="mailto:hugo@hugoai.nl">hugo@hugoai.nl</a>
+  </div>
 </footer>
 
-<!-- ============ contactformulier → Formspree ============ -->
 <script>
 (function(){
-  // ▶ ACTIVEREN: maak een gratis form aan op https://formspree.io en plak hieronder je endpoint
-  //   (bijv. "https://formspree.io/f/abcdwxyz"). Jouw e-mail blijft in je Formspree-account, niet in deze code.
+  // rand onder de navigatie zodra je scrolt
+  var nav = document.getElementById("nav");
+  addEventListener("scroll", function () { nav.classList.toggle("rand", scrollY > 8); }, { passive: true });
+
+  // rustig scrollen naar een onderdeel als je op een knop of in het menu klikt
+  var rustigScroll = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var scrollNr = 0;
+  function scrollNaar(y) {
+    var nr = ++scrollNr, start = scrollY, d = y - start, t0 = null;
+    var duur = Math.min(1500, Math.max(800, Math.abs(d) * 0.55));
+    function stap(ts) {
+      if (nr !== scrollNr) return;
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / duur);
+      var e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      scrollTo(0, start + d * e);
+      if (p < 1) requestAnimationFrame(stap);
+    }
+    requestAnimationFrame(stap);
+  }
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) { addEventListener(ev, function () { scrollNr++; }, { passive: true }); });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var doel = document.querySelector(a.getAttribute("href"));
+    if (!doel) return;
+    e.preventDefault();
+    var y = Math.max(0, doel.getBoundingClientRect().top + scrollY - nav.offsetHeight - 8);
+    if (rustigScroll) scrollTo(0, y); else scrollNaar(y);
+    history.replaceState(null, "", a.getAttribute("href"));
+  });
+
+  // rustig inschuiven
+  var items = document.querySelectorAll(".in");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("zien"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    items.forEach(function (el) { io.observe(el); });
+  } else items.forEach(function (el) { el.classList.add("zien"); });
+
+  // Voorbeeld van het belscherm. Wordt vervangen door de echte demo.
+  var ZAKEN = {
+    hugoai: { stil: "Bel me en vraag wat je wilt weten.", kop: "HugoAI", rol: "vertelt over HugoAI", probeer: "“Wat krijg ik na een gesprek?”", lijn: [
+      [2200, "hugo", "Hugo", "Hoi, met Hugo. Vraag me gerust wat je wilt weten."],
+      [6200, "jij", "Jij", "Wat doe je precies?"],
+      [8400, "hugo", "Hugo", "Ik neem de telefoon op voor jouw zaak, beantwoord vragen en maak afspraken."],
+      [13200, "jij", "Jij", "En wat krijg ik na een gesprek?"],
+      [15400, "hugo", "Hugo", "Een samenvatting: wie er belde, waarvoor, en wat we hebben afgesproken."]] },
+    garage: { stil: "Bel Autobedrijf Lindehof. Ik neem op.", kop: "Autobedrijf Lindehof", rol: "telefonist van Autobedrijf Lindehof", probeer: "“Kan mijn auto donderdag voor de APK?”", lijn: [
+      [2200, "hugo", "Hugo", "Autobedrijf Lindehof, goedemorgen. Waarmee kan ik u helpen?"],
+      [6000, "jij", "Jij", "Goedemorgen, ik wil graag een testrit plannen."],
+      [8800, "hugo", "Hugo", "Zeker, om welke auto gaat het?"],
+      [11800, "jij", "Jij", "Heb je iets elektrisch staan?"],
+      [14400, "hugo", "Hugo", "We hebben op dit moment geen volledig elektrische auto’s in de voorraad. Heeft u ook interesse in een hybride?"]] },
+    restaurant: { stil: "Bel het restaurant. Ik neem op.", kop: "Restaurant", rol: "telefonist van een voorbeeldrestaurant", probeer: "“Hebben jullie zaterdag nog een tafel voor vier?”", lijn: [
+      [2200, "hugo", "Hugo", "Goedemiddag, waarmee kan ik u helpen?"],
+      [5600, "jij", "Jij", "Hebben jullie zaterdag nog een tafel voor vier?"],
+      [8400, "hugo", "Hugo", "Zaterdag kan om zes uur of om half negen. Wat komt u het beste uit?"],
+      [12600, "jij", "Jij", "Zes uur graag."],
+      [14600, "hugo", "Hugo", "Genoteerd. Zijn er allergieën waar de keuken rekening mee moet houden?"]] },
+    kapsalon: { stil: "Bel de kapsalon. Ik neem op.", kop: "Kapsalon", rol: "telefonist van een voorbeeldsalon", probeer: "“Kan ik morgen nog geknipt worden?”", lijn: [
+      [2200, "hugo", "Hugo", "Goedemorgen, waarmee kan ik u helpen?"],
+      [5400, "jij", "Jij", "Kan ik morgen nog geknipt worden?"],
+      [8000, "hugo", "Hugo", "Morgen is er nog plek om tien uur of om half vier. Wat past u beter?"],
+      [12200, "jij", "Jij", "Half vier."],
+      [14000, "hugo", "Hugo", "Prima, half vier. Mag ik uw naam?"]] },
+    makelaar: { stil: "Bel de makelaar. Ik neem op.", kop: "Makelaar", rol: "telefonist van een voorbeeldmakelaar", probeer: "“Is het huis aan de Lindelaan nog te koop?”", lijn: [
+      [2200, "hugo", "Hugo", "Goedemiddag, waarmee kan ik u helpen?"],
+      [5600, "jij", "Jij", "Is het huis aan de Lindelaan nog te koop?"],
+      [8400, "hugo", "Hugo", "Ja, dat staat nog te koop. Wilt u het komen bekijken?"],
+      [11800, "jij", "Jij", "Graag, volgende week."],
+      [14000, "hugo", "Hugo", "Dat kan dinsdag of donderdag. Wat past u beter?"]] }
+  };
+  var zaak = "hugoai";
+  // Echte gesprekken. Nu nog Hugo's laptop via ngrok; later de server die altijd aanstaat.
+  var HUGO_SERVER = "banana-gaffe-pyramid.ngrok-free.dev";
+  ZAKEN.garage.sector = "autobedrijf-lindehof_v3";
+  var echt = null;
+  var podium = document.getElementById("podium");
+  var zinEl = document.getElementById("zin");
+  var wiePraat = document.getElementById("wiePraat");
+  var status = document.getElementById("status");
+  var tijd = document.getElementById("tijd");
+  var timers = [], woordTimers = [], klok = null, sec = 0;
+  var spreker = "stil";   // "hugo", "jij" of "stil": hoe sterk het snoer meegolft
+
+  var dempen = document.getElementById("dempen");
+  function zet(t) { status.textContent = t; }
+  function wisWoorden() { woordTimers.forEach(clearTimeout); woordTimers = []; }
+  function toonZin(soort, tekst, direct) {
+    wisWoorden();
+    wiePraat.textContent = soort === "jij" ? "Jij" : "Hugo";
+    zinEl.className = "zin" + (soort === "jij" ? " jij" : "");
+    zinEl.textContent = "";
+    var woorden = tekst.split(" ").map(function (w, i) {
+      var sp = document.createElement("span");
+      sp.className = "w"; sp.textContent = w;
+      zinEl.appendChild(sp);
+      zinEl.appendChild(document.createTextNode(" "));
+      return sp;
+    });
+    if (direct || rustigScroll) { woorden.forEach(function (w) { w.classList.add("aan"); }); return; }
+    var stap = soort === "jij" ? 150 : 230;
+    woorden.forEach(function (w, i) {
+      woordTimers.push(setTimeout(function () {
+        if (soort === "hugo") { woorden.forEach(function (x) { x.classList.remove("nieuw"); }); w.classList.add("nieuw"); }
+        w.classList.add("aan");
+        if (i === woorden.length - 1) woordTimers.push(setTimeout(function () { spreker = "stil"; }, 300));
+      }, i * stap));
+    });
+    spreker = soort;
+    zet(soort === "hugo" ? "// Hugo praat" : "// Hugo luistert");
+  }
+  function mmss(n) { return Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0"); }
+  function rust() {
+    stopEcht();
+    timers.forEach(clearTimeout); timers = []; wisWoorden();
+    if (klok) clearInterval(klok); klok = null;
+    spreker = "stil";
+  }
+  function bel() {
+    rust();
+    dempen.classList.remove("uit");
+    if (ZAKEN[zaak].sector) { belEcht(ZAKEN[zaak].sector); return; }
+    sec = 0; tijd.textContent = "0:00";
+    podium.classList.add("belt");
+    zet("// Hugo wordt opgestart");
+    timers.push(setTimeout(function () {
+      zet("// verbonden");
+      klok = setInterval(function () { sec++; tijd.textContent = mmss(sec); }, 1000);
+    }, 1200));
+    ZAKEN[zaak].lijn.forEach(function (r) { timers.push(setTimeout(function () { toonZin(r[1], r[3]); }, r[0])); });
+  }
+  function ophangen() {
+    rust();
+    podium.classList.remove("belt");
+    zet("// gesprek beëindigd");
+    document.querySelector("#bel span").textContent = "Opnieuw bellen";
+  }
+  function kies(z) {
+    if (!ZAKEN[z]) return;
+    zaak = z;
+    rust();
+    podium.classList.remove("belt");
+    sec = 0; tijd.textContent = "0:00"; zet("// klaar om te bellen");
+    document.querySelector("#bel span").textContent = "Bel Hugo";
+    document.getElementById("eilandNaam").textContent = z === "hugoai" ? "Hugo · HugoAI" : ZAKEN[z].kop;
+    document.getElementById("probeer").textContent = ZAKEN[z].probeer;
+    document.getElementById("podiumLabel").textContent = ZAKEN[z].sector ? "Live · je praat echt met Hugo" : "Voorbeeld · de echte demo komt hier";
+    document.getElementById("schermNoot").textContent = ZAKEN[z].sector ? "Je browser vraagt om je microfoon." : "Dit gesprek is nagespeeld.";
+    toonZin("hugo", ZAKEN[z].stil, true);
+    document.querySelectorAll(".keuze").forEach(function (k) {
+      var aan = k.dataset.zaak === z;
+      k.classList.toggle("actief", aan); k.setAttribute("aria-selected", aan ? "true" : "false");
+    });
+  }
+  document.querySelectorAll(".keuze").forEach(function (k) { k.addEventListener("click", function () { kies(k.dataset.zaak); }); });
+  document.querySelectorAll(".bel-zaak, .kies-zaak").forEach(function (a) { a.addEventListener("click", function () { kies(a.dataset.zaak); }); });
+  var vanElders = /^#demo-([a-z]+)$/.exec(location.hash);
+  if (vanElders && ZAKEN[vanElders[1]]) {
+    kies(vanElders[1]);
+    setTimeout(function () {
+      var d = document.getElementById("demo");
+      scrollTo(0, Math.max(0, d.getBoundingClientRect().top + scrollY - nav.offsetHeight - 8));
+    }, 60);
+  }
+  document.getElementById("bel").addEventListener("click", bel);
+  document.getElementById("ophangen").addEventListener("click", ophangen);
+  dempen.addEventListener("click", function () {
+    dempen.classList.toggle("uit");
+    if (echt) echt.gedempt = dempen.classList.contains("uit");
+  });
+
+  // ---- Echt gesprek: geluid heen en weer met de server (Int16, mono, 16 kHz), net als de demopagina ----
+  function stopEcht() {
+    if (!echt) return;
+    var e = echt; echt = null;
+    try { if (e.ws) e.ws.close(); } catch (x) {}
+    if (e.proc) e.proc.disconnect();
+    if (e.mic) e.mic.getTracks().forEach(function (t) { t.stop(); });
+    if (e.ctx) { try { e.ctx.close(); } catch (x) {} }
+  }
+  function mislukt(tekst) {
+    stopEcht();
+    if (klok) clearInterval(klok); klok = null;
+    spreker = "stil";
+    podium.classList.remove("belt");
+    zet("// niet verbonden");
+    toonZin("hugo", tekst, true);
+    document.querySelector("#bel span").textContent = "Opnieuw bellen";
+  }
+  function echteZin(wie) {
+    if (!echt || echt.laatste === wie) return;
+    echt.laatste = wie;
+    wiePraat.textContent = wie === "hugo" ? "Hugo" : "Jij";
+    zinEl.className = "zin" + (wie === "hugo" ? "" : " jij");
+    zinEl.textContent = wie === "hugo" ? "Hugo praat…" : "Hugo luistert…";
+    zet(wie === "hugo" ? "// Hugo praat" : "// Hugo luistert");
+  }
+  async function belEcht(sector) {
+    var e = echt = { ws: null, ctx: null, mic: null, proc: null, stukken: [], volgende: 0, micNiveau: 0, gedempt: false, laatste: null, open: false, laatstHugo: 0 };
+    sec = 0; tijd.textContent = "0:00";
+    podium.classList.add("belt");
+    zet("// Hugo wordt opgestart");
+    toonZin("hugo", "Even verbinden…", true);
+    try {
+      e.mic = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+    } catch (x) { if (echt === e) mislukt("Geen toegang tot je microfoon. Geef toestemming in je browser en probeer het opnieuw."); return; }
+    if (echt !== e) { e.mic.getTracks().forEach(function (t) { t.stop(); }); return; }
+    try {
+      e.ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+      if (e.ctx.state === "suspended") await e.ctx.resume();
+    } catch (x) { mislukt("Je browser kon het geluid niet starten."); return; }
+    try { e.ws = new WebSocket("wss://" + HUGO_SERVER + "/demo/browser/" + sector); }
+    catch (x) { mislukt("Hugo is nu niet bereikbaar. Probeer het later nog eens."); return; }
+    e.ws.binaryType = "arraybuffer";
+    e.ws.onopen = function () {
+      if (echt !== e) return;
+      e.open = true;
+      zet("// verbonden");
+      toonZin("hugo", "Hugo neemt op…", true);
+      klok = setInterval(function () { sec++; tijd.textContent = mmss(sec); }, 1000);
+      var bron = e.ctx.createMediaStreamSource(e.mic);
+      e.proc = e.ctx.createScriptProcessor(512, 1, 1);
+      e.proc.onaudioprocess = function (ev) {
+        if (!e.ws || e.ws.readyState !== WebSocket.OPEN) return;
+        var f = ev.inputBuffer.getChannelData(0), i16 = new Int16Array(f.length), som = 0;
+        for (var i = 0; i < f.length; i++) {
+          var v = e.gedempt ? 0 : Math.max(-1, Math.min(1, f[i]));
+          som += v * v;
+          i16[i] = v < 0 ? v * 32768 : v * 32767;
+        }
+        e.micNiveau = Math.sqrt(som / f.length);
+        e.ws.send(i16.buffer);   // ook bij dempen: stilte blijven sturen, anders hangt de server na 30 s op
+      };
+      bron.connect(e.proc);
+      var stil = e.ctx.createGain(); stil.gain.value = 0;   // stil naar de uitgang, zodat het geluid blijft lopen
+      e.proc.connect(stil); stil.connect(e.ctx.destination);
+    };
+    e.ws.onmessage = function (ev) {
+      if (echt !== e || !(ev.data instanceof ArrayBuffer) || !ev.data.byteLength) return;
+      var i16 = new Int16Array(ev.data), f = new Float32Array(i16.length), som = 0;
+      for (var i = 0; i < i16.length; i++) { f[i] = i16[i] / 32768; som += f[i] * f[i]; }
+      var buf = e.ctx.createBuffer(1, f.length, 16000);
+      buf.copyToChannel(f, 0);
+      var src = e.ctx.createBufferSource();
+      src.buffer = buf; src.connect(e.ctx.destination);
+      var begin = Math.max(e.ctx.currentTime + 0.05, e.volgende);
+      src.start(begin);
+      e.volgende = begin + f.length / 16000;
+      e.stukken.push([begin, e.volgende, Math.sqrt(som / f.length)]);
+      if (e.stukken.length > 600) e.stukken.splice(0, 300);
+    };
+    e.ws.onerror = function () { if (echt === e && !e.open) mislukt("Hugo is nu niet bereikbaar. Probeer het later nog eens."); };
+    e.ws.onclose = function (ev) {
+      if (echt !== e) return;
+      if (!e.open) { mislukt(ev && ev.code === 1013 ? "De demo is even bezet. Probeer het over een paar minuten nog eens." : "Hugo is nu niet bereikbaar. Probeer het later nog eens."); return; }
+      // Hugo hing zelf op: laat zijn laatste woorden nog uitspelen
+      var rest = Math.max(0, (e.volgende - e.ctx.currentTime) * 1000);
+      setTimeout(function () { if (echt === e) ophangen(); }, rest + 300);
+    };
+  }
+  toonZin("hugo", ZAKEN[zaak].stil, true);
+
+  // Het snoer: een lijn met lusjes, zoals een telefoonsnoer van opzij. Golft mee met wie er praat.
+  var svg = document.getElementById("snoer");
+  var lijn = document.getElementById("snoerLijn"), achter = document.getElementById("snoerAchter"), schaduw = document.getElementById("snoerSchaduw");
+  var B = 0, H = 0, fase = 0, niveau = 0.06, vorig = null, zichtbaar = true;
+  function maat() { B = svg.clientWidth; H = svg.clientHeight; svg.setAttribute("viewBox", "0 0 " + B + " " + H); }
+  function teken(t) {
+    var marge = 30, lengte = B + marge * 2;
+    var b = H * 0.125, c = b * 1.05, a = 11 / (Math.PI * 2);   // ringen van ~30px, elke 11px een nieuwe
+    var lussen = Math.ceil(lengte / (Math.PI * 2 * a));
+    var midden = H * 0.4, voor = "", acht = "", sch = "", vorigeSoort = null, vx = 0, vy = 0;
+    for (var u = 0; u <= Math.PI * 2 * lussen; u += 0.24) {
+      var x = -marge + a * u - b * Math.sin(u + fase);
+      var rel = Math.max(0, Math.min(1, (x + marge) / lengte));
+      var venster = Math.sin(Math.PI * rel);
+      var golf = niveau * H * 0.2 * Math.sin(rel * 9 - t * 3.1) * venster + niveau * H * 0.07 * Math.sin(rel * 23 - t * 5.3) * venster;
+      var dikte = c * (1 + niveau * 0.35 * (0.5 + 0.5 * Math.sin(rel * 14 - t * 4)));
+      var y = midden + H * 0.18 * venster + golf + dikte * Math.cos(u + fase);
+      var soort = (a - b * Math.cos(u + fase)) >= 0 ? "v" : "a";   // vooruit = voorkant van de ring, terug = achterkant
+      var pt = " " + x.toFixed(1) + " " + y.toFixed(1);
+      if (soort !== vorigeSoort) {
+        var start = vorigeSoort === null ? "M" + pt : "M " + vx.toFixed(1) + " " + vy.toFixed(1) + " L" + pt;
+        if (soort === "v") voor += start; else acht += start;
+      } else if (soort === "v") voor += " L" + pt; else acht += " L" + pt;
+      if (soort === "v") sch += (vorigeSoort === "v" ? " L" : " M") + " " + x.toFixed(1) + " " + (y + 11).toFixed(1);
+      vorigeSoort = soort; vx = x; vy = y;
+    }
+    lijn.setAttribute("d", voor); achter.setAttribute("d", acht); schaduw.setAttribute("d", sch);
+  }
+  function lus(ts) {
+    if (!zichtbaar) { vorig = null; return; }
+    var t = ts / 1000, dt = vorig === null ? 0 : Math.min(.05, t - vorig); vorig = t;
+    var doel;
+    if (echt && echt.open) {
+      var nu = echt.ctx.currentTime, h = 0;
+      for (var k = echt.stukken.length - 1; k >= 0; k--) {
+        var st = echt.stukken[k];
+        if (st[0] <= nu && nu < st[1]) { h = st[2]; break; }
+        if (st[1] < nu - 1) break;
+      }
+      if (h > 0.012) echt.laatstHugo = nu;
+      var hugoPraat = nu - echt.laatstHugo < 0.6 && echt.laatstHugo > 0;
+      if (echt.laatstHugo > 0) echteZin(hugoPraat ? "hugo" : "jij");
+      doel = h > 0.012 ? Math.min(1, 0.25 + h * 5)
+           : echt.micNiveau > 0.02 ? Math.min(0.6, 0.12 + echt.micNiveau * 4)
+           : 0.06;
+    } else {
+      doel = spreker === "hugo" ? 0.55 + 0.45 * Math.abs(Math.sin(t * 8.3) * Math.sin(t * 3.1))
+           : spreker === "jij" ? 0.22 + 0.12 * Math.abs(Math.sin(t * 6.7))
+           : 0.06;
+    }
+    niveau += (doel - niveau) * Math.min(1, dt * 6);
+    fase += dt * (0.25 + niveau * 1.6);
+    teken(t);
+    requestAnimationFrame(lus);
+  }
+  maat(); teken(0);
+  addEventListener("resize", function () { maat(); teken(performance.now() / 1000); });
+  if (!rustigScroll) {
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { var was = zichtbaar; zichtbaar = e.isIntersecting; if (zichtbaar && !was) requestAnimationFrame(lus); });
+      }).observe(podium);
+    }
+    requestAnimationFrame(lus);
+  }
+
+  // formulier naar Formspree
   var FORM_ENDPOINT = "https://formspree.io/f/xrewjzvl";
-
   var form = document.getElementById("demoForm");
-  if (!form) return;
-  var statusEl = document.getElementById("formStatus");
+  var st = document.getElementById("formStatus");
   var btn = document.getElementById("demoSubmit");
-
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    statusEl.className = "form-status";
-
-    if (form.elements._gotcha && form.elements._gotcha.value) return; // spam-val
-    if (!form.checkValidity()) {
-      statusEl.textContent = "Vul je naam en een geldig e-mailadres in.";
-      statusEl.classList.add("err");
-      return;
-    }
-    if (FORM_ENDPOINT.indexOf("YOUR_FORM_ID") !== -1) {
-      statusEl.textContent = "Formulier nog niet gekoppeld — activeer Formspree (zie README).";
-      statusEl.classList.add("err");
-      return;
-    }
-
-    var voornaam = ((form.elements.naam && form.elements.naam.value) || "").trim().split(/\s+/)[0];
-    var telefoon = ((form.elements.telefoon && form.elements.telefoon.value) || "").trim();
-
-    btn.disabled = true;
-    var oldLabel = btn.textContent;
-    btn.textContent = "Versturen…";
-
-    fetch(FORM_ENDPOINT, {
-      method: "POST",
-      headers: { "Accept": "application/json" },
-      body: new FormData(form)
-    })
+    st.className = "form-status";
+    if (form.elements._gotcha.value) return;
+    if (!form.checkValidity()) { st.textContent = "Vul je naam, de naam van je zaak en een geldig e-mailadres in."; st.classList.add("err"); return; }
+    var voornaam = (form.elements.naam.value || "").trim().split(/\s+/)[0];
+    btn.disabled = true; var oud = btn.textContent; btn.textContent = "Versturen…";
+    fetch(FORM_ENDPOINT, { method: "POST", headers: { "Accept": "application/json" }, body: new FormData(form) })
       .then(function (r) {
-        if (r.ok) {
-          form.reset();
-          var dank = voornaam ? ("Bedankt " + voornaam + "!") : "Bedankt!";
-          dank += telefoon ? (" We bellen je snel op " + telefoon + " voor je demo.")
-                           : " We bellen je snel terug voor je demo.";
-          statusEl.textContent = dank;
-          statusEl.classList.add("ok");
-        } else {
-          statusEl.textContent = "Er ging iets mis. Probeer het later opnieuw.";
-          statusEl.classList.add("err");
-        }
+        if (r.ok) { form.reset(); st.textContent = (voornaam ? "Bedankt " + voornaam + "! " : "Bedankt! ") + "We maken je demo en mailen je de link."; st.classList.add("ok"); }
+        else { st.textContent = "Er ging iets mis. Probeer het later opnieuw of mail naar hugo@hugoai.nl."; st.classList.add("err"); }
       })
-      .catch(function () {
-        statusEl.textContent = "Geen verbinding. Probeer het later opnieuw.";
-        statusEl.classList.add("err");
-      })
-      .finally(function () {
-        btn.disabled = false;
-        btn.textContent = oldLabel;
-      });
+      .catch(function () { st.textContent = "Geen verbinding. Probeer het later opnieuw of mail naar hugo@hugoai.nl."; st.classList.add("err"); })
+      .finally(function () { btn.disabled = false; btn.textContent = oud; });
   });
+
+  document.getElementById("jaar").textContent = new Date().getFullYear();
 })();
 </script>
-
-<!-- ============ libs (UMD, met onerror-vangnet) ============ -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" onerror="window.__gsapFail=true"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" onerror="window.__gsapFail=true"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" onerror="window.__lenisFail=true"></script>
-
-<!-- ============ site logic (geen module — draait altijd) ============ -->
-<script>
-(function(){
-  "use strict";
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var hasGsap = !window.__gsapFail && typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
-  var hasLenis = !window.__lenisFail && typeof window.Lenis !== "undefined";
-
-  // nav shading
-  var nav = document.getElementById("nav");
-  function onScrollNav(){ nav.classList.toggle("scrolled", (window.scrollY||0) > 40); }
-  window.addEventListener("scroll", onScrollNav, {passive:true});
-  onScrollNav();
-
-  // Lenis smooth scroll (skip bij reduced motion of load-fout)
-  var lenis = null;
-  if (hasLenis && !reduced){
-    lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1.0 });
-    function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-  }
-  window.__lenis = lenis;
-
-  // Reveal-animaties: alleen inschakelen als GSAP er is; anders blijft alles zichtbaar.
-  if (hasGsap && !reduced){
-    window.gsap.registerPlugin(window.ScrollTrigger);
-    if (lenis){
-      lenis.on("scroll", window.ScrollTrigger.update);
-      window.gsap.ticker.lagSmoothing(0);
-    }
-    document.body.classList.add("anim-ready");
-    var reveals = document.querySelectorAll(".reveal");
-    reveals.forEach(function(el, i){
-      window.ScrollTrigger.create({
-        trigger: el,
-        start: "top 88%",
-        once: true,
-        onEnter: function(){
-          setTimeout(function(){ el.classList.add("shown"); }, (i % 4) * 90);
-        }
-      });
-    });
-    // hero-reveals meteen
-    document.querySelectorAll("#hero .reveal").forEach(function(el, i){
-      setTimeout(function(){ el.classList.add("shown"); }, 350 + i * 140);
-    });
-  }
-  window.__hasGsap = hasGsap;
-  window.__reduced = reduced;
-})();
-</script>
-
-<!-- ============ de held: iriserende stem-bol (Three.js module) ============ -->
-<script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }
-</script>
-
-<script type="module">
-import * as THREE from "three";
-
-const reduced = window.__reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const isMobile = window.matchMedia("(max-width: 860px)").matches;
-const stage = document.getElementById("stage");
-
-function enableCssFallback(){
-  document.body.classList.add("no-webgl");
-  document.getElementById("micBtn").classList.add("hidden");
-}
-
-let renderer;
-try {
-  renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" });
-  const gl = renderer.getContext();
-  if (!gl) throw new Error("no context");
-} catch (e) {
-  enableCssFallback();
-  renderer = null;
-}
-
-if (renderer) {
-
-/* ---------- scene ---------- */
-const DPR_CAP = 1.5;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, DPR_CAP));
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000, 0);
-stage.appendChild(renderer.domElement);
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 50);
-camera.position.set(0, 0, 6.2);
-
-/* ---------- shaders ---------- */
-const NOISE = /* glsl */`
-// Simplex 3D noise — Ashima / Stefan Gustavson (MIT)
-vec4 permute(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
-vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }
-float snoise(vec3 v){
-  const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-  vec3 i  = floor(v + dot(v, C.yyy));
-  vec3 x0 = v - i + dot(i, C.xxx);
-  vec3 g = step(x0.yzx, x0.xyz);
-  vec3 l = 1.0 - g;
-  vec3 i1 = min(g.xyz, l.zxy);
-  vec3 i2 = max(g.xyz, l.zxy);
-  vec3 x1 = x0 - i1 + 1.0 * C.xxx;
-  vec3 x2 = x0 - i2 + 2.0 * C.xxx;
-  vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
-  i = mod(i, 289.0);
-  vec4 p = permute(permute(permute(
-            i.z + vec4(0.0, i1.z, i2.z, 1.0))
-          + i.y + vec4(0.0, i1.y, i2.y, 1.0))
-          + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-  float n_ = 1.0/7.0;
-  vec3 ns = n_ * D.wyz - D.xzx;
-  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-  vec4 x_ = floor(j * ns.z);
-  vec4 y_ = floor(j - 7.0 * x_);
-  vec4 x = x_ * ns.x + ns.yyyy;
-  vec4 y = y_ * ns.x + ns.yyyy;
-  vec4 h = 1.0 - abs(x) - abs(y);
-  vec4 b0 = vec4(x.xy, y.xy);
-  vec4 b1 = vec4(x.zw, y.zw);
-  vec4 s0 = floor(b0)*2.0 + 1.0;
-  vec4 s1 = floor(b1)*2.0 + 1.0;
-  vec4 sh = -step(h, vec4(0.0));
-  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
-  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-  vec3 p0 = vec3(a0.xy, h.x);
-  vec3 p1 = vec3(a0.zw, h.y);
-  vec3 p2 = vec3(a1.xy, h.z);
-  vec3 p3 = vec3(a1.zw, h.w);
-  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
-  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
-  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-  m = m * m;
-  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
-}
-float fbm(vec3 p){
-  float f = 0.0;
-  f += 0.5333 * snoise(p);
-  f += 0.2667 * snoise(p * 2.02);
-  f += 0.1333 * snoise(p * 4.03);
-  return f;
-}
-`;
-
-const vertexShader = /* glsl */`
-uniform float uTime;
-uniform float uAmp;        // displacement-sterkte
-uniform float uFreq;       // noise-frequentie
-uniform float uAudio;      // stem/mic-niveau 0..1
-uniform float uBreath;     // adem-schaal
-uniform vec2  uMouse;      // -1..1
-varying vec3 vNormal;
-varying vec3 vWorldPos;
-varying float vDisp;
-${NOISE}
-
-float displaceAmt(vec3 p){
-  float t = uTime * 0.28;
-  float n = fbm(p * uFreq + vec3(t, t * 0.7, -t * 0.5));
-  // stem-golven: hogere frequentie-rimpel die met audio meegroeit
-  float ripple = snoise(p * (uFreq * 3.4) + vec3(0.0, uTime * 1.4, 0.0));
-  float mouseBend = dot(normalize(p), normalize(vec3(uMouse * 1.2, 1.0))) * 0.06 * length(uMouse);
-  return n * uAmp
-       + ripple * uAmp * (0.28 + uAudio * 1.15)
-       + mouseBend;
-}
-
-void main(){
-  vec3 p = normalize(position);
-  float d = displaceAmt(p);
-  vDisp = d;
-
-  // ademende basisschaal + audio-puls
-  float scale = uBreath * (1.0 + uAudio * 0.06);
-  vec3 displaced = p * (1.0 + d) * scale;
-
-  // normal her-afleiden via buurpunten (tangent-ruimte)
-  vec3 tangent = normalize(cross(p, abs(p.y) > 0.99 ? vec3(1.0,0.0,0.0) : vec3(0.0,1.0,0.0)));
-  vec3 bitan = normalize(cross(p, tangent));
-  float eps = 0.06;
-  vec3 pt = normalize(p + tangent * eps);
-  vec3 pb = normalize(p + bitan * eps);
-  vec3 dpt = pt * (1.0 + displaceAmt(pt)) * scale;
-  vec3 dpb = pb * (1.0 + displaceAmt(pb)) * scale;
-  vNormal = normalize(cross(dpt - displaced, dpb - displaced));
-
-  vec4 world = modelMatrix * vec4(displaced, 1.0);
-  vWorldPos = world.xyz;
-  gl_Position = projectionMatrix * viewMatrix * world;
-}
-`;
-
-const fragmentShader = /* glsl */`
-precision highp float;
-uniform float uTime;
-uniform float uAudio;
-uniform float uHueShift;   // faseverschuiving per scroll-sectie
-uniform float uIriStrength;
-uniform vec3  uBgTint;
-varying vec3 vNormal;
-varying vec3 vWorldPos;
-varying float vDisp;
-${NOISE}
-
-// dunne-film interferentie: optisch padverschil -> per-kanaal cosinus
-vec3 thinFilm(float ndv, float thickness){
-  // ruwe benadering van interferentie: pad ~ dikte * cos(theta)
-  float opd = thickness * (0.6 + 0.4 * ndv);
-  // golflengte-gewichten R/G/B (nm-ratio's genormaliseerd)
-  vec3 wl = vec3(1.0, 1.23, 1.48);
-  vec3 phase = 6.28318 * (opd * wl + uHueShift);
-  return 0.5 + 0.5 * cos(phase);
-}
-
-void main(){
-  vec3 N = normalize(vNormal);
-  vec3 V = normalize(cameraPosition - vWorldPos);
-  float ndv = clamp(dot(N, V), 0.0, 1.0);
-  float fresnel = pow(1.0 - ndv, 2.4);
-
-  // filmdikte varieert met noise + vervorming + stem
-  float thickN = fbm(normalize(vWorldPos) * 1.6 + vec3(uTime * 0.06));
-  float thickness = 1.35 + thickN * 0.85 + vDisp * 2.2 + uAudio * 0.5;
-
-  vec3 iri = thinFilm(ndv, thickness);
-  // pastel maken: richting wit trekken, dan verzadiging terug bij grazing
-  vec3 pastel = mix(vec3(1.0), iri, 0.42 + 0.45 * fresnel);
-
-  // parelmoer-basis (warm wit, licht getint door achtergrond)
-  vec3 pearl = mix(vec3(0.965, 0.955, 0.945), uBgTint, 0.15);
-
-  // hoofdmix: kern parelmoer, iriserende rand
-  vec3 col = mix(pearl, pastel, clamp(fresnel * 1.35 * uIriStrength + 0.12, 0.0, 1.0));
-
-  // dubbele studio-highlights
-  vec3 L1 = normalize(vec3(-0.55, 0.75, 0.65));
-  vec3 L2 = normalize(vec3(0.7, -0.25, 0.55));
-  float spec1 = pow(max(dot(reflect(-L1, N), V), 0.0), 90.0);
-  float spec2 = pow(max(dot(reflect(-L2, N), V), 0.0), 40.0);
-  col += vec3(1.0) * spec1 * 0.85;
-  col += iri * spec2 * 0.35;
-
-  // zachte rim-gloed die met stem oplicht
-  col += pastel * fresnel * (0.18 + uAudio * 0.5);
-
-  // subtiele binnen-schaduw voor diepte
-  col *= 0.92 + 0.08 * ndv;
-
-  // rand licht doorschijnend zoals een zeepbel
-  float alpha = mix(0.97, 0.82, pow(ndv, 1.6));
-  gl_FragColor = vec4(col, alpha);
-}
-`;
-
-const uniforms = {
-  uTime:        { value: 0 },
-  uAmp:         { value: 0.10 },
-  uFreq:        { value: 1.15 },
-  uAudio:       { value: 0 },
-  uBreath:      { value: 1 },
-  uMouse:       { value: new THREE.Vector2(0, 0) },
-  uHueShift:    { value: 0 },
-  uIriStrength: { value: 1 },
-  uBgTint:      { value: new THREE.Color(0xf6f3ee) }
-};
-
-const detail = isMobile ? 80 : 128;
-const geo = new THREE.SphereGeometry(1, detail, detail);
-const mat = new THREE.ShaderMaterial({
-  vertexShader, fragmentShader, uniforms,
-  transparent: true
-});
-const orb = new THREE.Mesh(geo, mat);
-scene.add(orb);
-
-// satelliet-bolletjes voor de "split"-state (features-sectie)
-const satUniformsList = [];
-const sats = new THREE.Group();
-const SAT_COUNT = isMobile ? 4 : 6;
-for (let i = 0; i < SAT_COUNT; i++) {
-  const u = {
-    uTime: { value: 0 }, uAmp: { value: 0.16 }, uFreq: { value: 2.2 },
-    uAudio: { value: 0 }, uBreath: { value: 1 }, uMouse: { value: new THREE.Vector2() },
-    uHueShift: { value: i * 0.13 }, uIriStrength: { value: 1.2 },
-    uBgTint: { value: new THREE.Color(0xf6f3ee) }
-  };
-  satUniformsList.push(u);
-  const m = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 48, 48),
-    new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms: u, transparent: true })
-  );
-  const a = (i / SAT_COUNT) * Math.PI * 2;
-  m.userData.angle = a;
-  m.scale.setScalar(0.001);
-  sats.add(m);
-}
-scene.add(sats);
-
-/* ---------- orb state (door scroll gestuurd, ge-lerpt in rAF) ---------- */
-const state = {
-  x: isMobile ? 0 : 1.35,  // hero: rechts van de tekst
-  y: isMobile ? 0.9 : 0.35,
-  scale: isMobile ? 1.15 : 1.55,
-  amp: 0.10, freq: 1.15,
-  hue: 0.0, iri: 1.0,
-  split: 0.0,              // 0 = één bol, 1 = satellieten uit
-  rotSpeed: 0.05
-};
-const target = Object.assign({}, state);
-
-function applyShot(shot){ Object.assign(target, shot); }
-
-const SHOTS = {
-  hero:     { x: isMobile ? 0 : 1.35, y: isMobile ? 0.9 : 0.35, scale: isMobile ? 1.15 : 1.55, amp: 0.10, freq: 1.15, hue: 0.00, iri: 1.0, split: 0, rotSpeed: 0.05 },
-  how:      { x: isMobile ? 0 : -1.6, y: 0.55, scale: 0.95, amp: 0.05, freq: 0.9,  hue: 0.12, iri: 0.85, split: 0, rotSpeed: 0.12 },
-  features: { x: 0, y: isMobile ? -0.8 : 0.1, scale: 0.62, amp: 0.16, freq: 1.9,  hue: 0.28, iri: 1.25, split: 1, rotSpeed: 0.2 },
-  sectors:  { x: isMobile ? 0 : 1.7, y: -0.1, scale: 0.85, amp: 0.08, freq: 1.2,  hue: 0.45, iri: 1.0, split: 0, rotSpeed: 0.08 },
-  cta:      { x: 0, y: 0.25, scale: 1.25, amp: 0.045, freq: 0.8, hue: 0.62, iri: 1.15, split: 0, rotSpeed: 0.04 }
-};
-applyShot(SHOTS.hero);
-
-if (window.__hasGsap && !reduced) {
-  const ST = window.ScrollTrigger;
-  const mkTrig = (sel, shot) => ST.create({
-    trigger: sel, start: "top 60%", end: "bottom 60%",
-    onEnter: () => applyShot(SHOTS[shot]),
-    onEnterBack: () => applyShot(SHOTS[shot])
-  });
-  ST.create({ trigger: "#hero", start: "top top", end: "bottom 60%", onEnter: () => applyShot(SHOTS.hero), onEnterBack: () => applyShot(SHOTS.hero) });
-  mkTrig("#how", "how");
-  mkTrig("#features", "features");
-  mkTrig("#sectors", "sectors");
-  mkTrig("#cta", "cta");
-  // extra cinematiek: hero pinned gevoel — orb groeit licht mee met eerste scroll
-  window.gsap.to(target, {
-    scale: "+=0.25",
-    ease: "none",
-    scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.6 }
-  });
-} else {
-  // zonder GSAP: sectiewissel via IntersectionObserver
-  const map = { hero: "#hero", how: "#how", features: "#features", sectors: "#sectors", cta: "#cta" };
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => { if (en.isIntersecting) applyShot(SHOTS[en.target.dataset.shot]); });
-  }, { threshold: 0.35 });
-  Object.entries(map).forEach(([k, sel]) => {
-    const el = document.querySelector(sel);
-    if (el) { el.dataset.shot = k; io.observe(el); }
-  });
-}
-
-/* ---------- muis-parallax ---------- */
-const mouse = new THREE.Vector2(0, 0);
-if (!reduced) {
-  window.addEventListener("pointermove", (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -((e.clientY / window.innerHeight) * 2 - 1);
-  }, { passive: true });
-}
-
-/* ---------- stem: mic (optioneel) of autonome spraak-envelop ---------- */
-let analyser = null, audioData = null, micLive = false;
-const micBtn = document.getElementById("micBtn");
-micBtn.addEventListener("click", async () => {
-  if (micLive) return;
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const src = ctx.createMediaStreamSource(stream);
-    analyser = ctx.createAnalyser();
-    analyser.fftSize = 512;
-    audioData = new Uint8Array(analyser.frequencyBinCount);
-    src.connect(analyser);
-    micLive = true;
-    micBtn.classList.add("live");
-    micBtn.querySelector(".lbl").textContent = "Hij luistert…";
-  } catch (err) {
-    micBtn.querySelector(".lbl").textContent = "Mic geweigerd — geen probleem";
-    setTimeout(() => { micBtn.querySelector(".lbl").textContent = "Praat tegen de bol"; }, 2600);
-  }
-});
-
-let speechEnv = 0;            // doelwaarde vanuit typwriter
-function autonomousVoice(t){
-  // spraak-achtig ritme: lettergrepen ~4Hz, zinnen ~0.22Hz, pauzes
-  const syll = Math.max(0, Math.sin(t * 7.2) * 0.55 + Math.sin(t * 11.7) * 0.3);
-  const phrase = Math.max(0, Math.sin(t * 0.55) * 0.9 + 0.25);
-  return Math.min(1, syll * phrase * 0.9 + speechEnv * 0.7);
-}
-function readMic(){
-  analyser.getByteFrequencyData(audioData);
-  let sum = 0;
-  const n = Math.min(80, audioData.length);
-  for (let i = 2; i < n; i++) sum += audioData[i];
-  return Math.min(1, (sum / n) / 90);
-}
-
-/* ---------- typwriter: woorden ontstaan uit de bol ---------- */
-const script = [
-  { who: "caller", text: "…gaat over. Hugo neemt op." },
-  { who: "hugo",   text: "Goedendag, met Hugo van Auto Centrum Utrecht. Waarmee kan ik u helpen?" },
-  { who: "caller", text: "Ik wil graag een proefrit in de grijze ID.4." },
-  { who: "hugo",   text: "Leuk! Donderdag om 14:00 is er plek. Zal ik die voor u vastzetten?" },
-  { who: "caller", text: "Ja, graag." },
-  { who: "hugo",   text: "Genoteerd. U ontvangt zo de bevestiging. Tot donderdag!" }
-];
-const sayHugo = document.getElementById("sayHugo");
-const sayCaller = document.getElementById("sayCaller");
-let scriptIdx = 0, typing = false, speechTimer = null;
-
-function placeBubble(el, who){
-  // rond de bol positioneren (bol staat in hero rechtsboven-ish)
-  const cx = window.innerWidth * (isMobile ? 0.5 : 0.66);
-  const cy = window.innerHeight * (isMobile ? 0.32 : 0.42);
-  const r = Math.min(window.innerWidth, window.innerHeight) * (isMobile ? 0.26 : 0.24);
-  const ang = (who === "hugo" ? -0.5 : 2.6) + (Math.random() - 0.5) * 0.7;
-  const x = cx + Math.cos(ang) * r * 1.25;
-  const y = cy + Math.sin(ang) * r * 1.1;
-  el.style.left = Math.max(12, Math.min(x, window.innerWidth - 340)) + "px";
-  el.style.top = Math.max(70, Math.min(y, window.innerHeight - 160)) + "px";
-}
-
-function typeLine(entry, done){
-  const el = entry.who === "hugo" ? sayHugo : sayCaller;
-  const other = entry.who === "hugo" ? sayCaller : sayHugo;
-  const txt = el.querySelector(".txt");
-  placeBubble(el, entry.who);
-  txt.textContent = "";
-  el.style.opacity = 0;
-  const fadeIn = () => { el.style.transition = "opacity .5s ease"; el.style.opacity = 1; };
-  fadeIn();
-  if (reduced) {
-    txt.textContent = entry.text;
-    speechTimer = setTimeout(done, 2600);
-    return;
-  }
-  let i = 0;
-  typing = true;
-  function tick(){
-    if (i <= entry.text.length){
-      txt.textContent = entry.text.slice(0, i);
-      // bol "spreekt" mee als Hugo typt
-      speechEnv = entry.who === "hugo" ? 0.55 + Math.random() * 0.35 : 0.12;
-      i++;
-      speechTimer = setTimeout(tick, 34 + Math.random() * 40);
-    } else {
-      typing = false;
-      speechEnv = 0;
-      speechTimer = setTimeout(() => {
-        el.style.opacity = 0;
-        if (other) other.style.opacity = 0;
-        setTimeout(done, 500);
-      }, 1900);
-    }
-  }
-  tick();
-}
-function runScript(){
-  typeLine(script[scriptIdx], () => {
-    scriptIdx = (scriptIdx + 1) % script.length;
-    // korte adempauze tussen zinnen
-    speechTimer = setTimeout(runScript, scriptIdx === 0 ? 3500 : 500);
-  });
-}
-// alleen tonen zolang we in/nabij de hero zijn
-let heroVisible = true;
-const heroEl = document.getElementById("hero");
-new IntersectionObserver((en) => {
-  heroVisible = en[0].isIntersecting;
-  document.getElementById("speech").style.opacity = heroVisible ? 1 : 0;
-  document.getElementById("speech").style.transition = "opacity .5s ease";
-}, { threshold: 0.25 }).observe(heroEl);
-setTimeout(runScript, 1800);
-
-/* ---------- resize / visibility ---------- */
-function onResize(){
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, DPR_CAP));
-}
-window.addEventListener("resize", onResize);
-
-let running = true, rafId = 0;
-document.addEventListener("visibilitychange", () => {
-  running = !document.hidden;
-  if (running) { clock.getDelta(); rafId = requestAnimationFrame(loop); }
-  else cancelAnimationFrame(rafId);
-});
-
-/* ---------- render loop ---------- */
-const clock = new THREE.Clock();
-const lerp = (a, b, k) => a + (b - a) * k;
-
-function loop(){
-  if (!running) return;
-  rafId = requestAnimationFrame(loop);
-  const dt = Math.min(clock.getDelta(), 0.05);
-  const t = clock.elapsedTime;
-  const k = 1 - Math.pow(0.0015, dt); // framerate-onafhankelijke lerp
-
-  // state -> target
-  for (const key of ["x","y","scale","amp","freq","hue","iri","split","rotSpeed"]) {
-    state[key] = lerp(state[key], target[key], k);
-  }
-
-  // audio-niveau
-  let level;
-  if (micLive && analyser) level = readMic();
-  else if (reduced) level = 0.08;
-  else level = autonomousVoice(t);
-  uniforms.uAudio.value = lerp(uniforms.uAudio.value, level, 0.25);
-
-  // ademen
-  const breath = reduced ? 1 : 1 + Math.sin(t * 0.9) * 0.02;
-
-  uniforms.uTime.value = reduced ? 8.0 : t;
-  uniforms.uAmp.value = state.amp * (reduced ? 0.4 : 1);
-  uniforms.uFreq.value = state.freq;
-  uniforms.uBreath.value = breath;
-  uniforms.uHueShift.value = state.hue + (reduced ? 0 : t * 0.008);
-  uniforms.uIriStrength.value = state.iri;
-  uniforms.uMouse.value.lerp(mouse, 0.06);
-
-  orb.position.x = state.x + (reduced ? 0 : mouse.x * 0.12);
-  orb.position.y = state.y + (reduced ? 0 : mouse.y * 0.1);
-  orb.scale.setScalar(state.scale * (1 - state.split * 0.55));
-  if (!reduced) orb.rotation.y += dt * state.rotSpeed;
-
-  // satellieten: uit de bol geboren bij split
-  const s = state.split;
-  sats.position.copy(orb.position);
-  sats.children.forEach((m, i) => {
-    const a = m.userData.angle + (reduced ? 0 : t * 0.18);
-    const r = 1.15 * state.scale * s + 0.001;
-    m.position.set(Math.cos(a) * r * 1.35, Math.sin(a) * r * 0.75, Math.sin(a * 2.0) * 0.3 * s);
-    m.scale.setScalar(Math.max(0.001, 0.22 * state.scale * s));
-    m.visible = s > 0.004; // niet renderen zolang de satellieten onzichtbaar zijn (hero + meeste secties)
-    const u = satUniformsList[i];
-    u.uTime.value = uniforms.uTime.value + i * 3.7;
-    u.uAudio.value = uniforms.uAudio.value * 0.7;
-    u.uHueShift.value = state.hue + i * 0.13;
-    u.uBreath.value = breath;
-  });
-
-  renderer.render(scene, camera);
-}
-rafId = requestAnimationFrame(loop);
-
-// WebGL context-verlies -> nette fallback
-renderer.domElement.addEventListener("webglcontextlost", (e) => {
-  e.preventDefault();
-  cancelAnimationFrame(rafId);
-  enableCssFallback();
-}, false);
-
-} // einde renderer-guard
-</script>
-
-<!-- vangnet: als de module (import map / three-CDN) faalt, CSS-orb tonen -->
-<script>
-window.addEventListener("load", function(){
-  setTimeout(function(){
-    var canvas = document.querySelector("#stage canvas");
-    if (!canvas && !document.body.classList.contains("no-webgl")) {
-      document.body.classList.add("no-webgl");
-      var mb = document.getElementById("micBtn");
-      if (mb) mb.classList.add("hidden");
-    }
-  }, 2500);
-});
-</script>
-
 </body>
 </html>

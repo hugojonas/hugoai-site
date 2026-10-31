@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Over HugoAI — De telefonist die altijd opneemt</title>
+<meta name="description" content="HugoAI bouwt AI-telefonisten voor het Nederlandse mkb. Persoonlijk ingericht per zaak, met na elk gesprek een heldere samenvatting.">
+<meta name="theme-color" content="#f2f1ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..600;1,8..60,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stijl.css">
+<style>
+.over-hero{padding:110px 0 72px}
+.over-hero h1{font-size:clamp(44px,5.6vw,84px);line-height:1;letter-spacing:-.04em;max-width:13em}
+.over-hero .lede{margin-top:28px;font-size:21px;line-height:1.45;color:var(--soft);max-width:640px}
+.twee{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;align-items:start}
+.lopend p{font-size:19px;color:var(--ink-2);max-width:620px}
+.lopend p + p{margin-top:18px}
+.lopend a{color:var(--ink);text-underline-offset:4px}
+.stappen{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:56px}
+.stap{border-top:1px solid var(--ink);padding-top:18px}
+.stap .nr{font-family:'Source Serif 4',serif;font-style:italic;font-size:44px;line-height:1;color:var(--petrol)}
+.stap h3{font-family:'Hanken Grotesk',sans-serif;font-weight:600;font-size:19px;letter-spacing:0;color:var(--ink);margin:16px 0 8px}
+.stap p{font-size:16.5px;color:var(--soft)}
+.anders{border-top:1px solid var(--line)}
+.anders .punten{grid-template-columns:repeat(3,1fr);margin-top:56px}
+.slot{background:var(--card);border-top:1px solid var(--line)}
+.slot .hero-knoppen{margin-top:30px}
+@media (max-width:1060px){
+  .twee{grid-template-columns:1fr;gap:32px}
+  .stappen,.anders .punten{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .over-hero{padding:56px 0 48px}
+  .over-hero .lede{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="merk" href="index.html"><i></i>HugoAI</a>
+    <nav class="nav-links" aria-label="Hoofdmenu">
+      <a href="index.html#demo">Live demo</a>
+      <a href="index.html#samenvatting">Wat je krijgt</a>
+      <a href="index.html#zaken">Voor jouw zaak</a>
+    </nav>
+    <div class="nav-rechts">
+      <a class="knop knop-rand" href="index.html#aanvragen">Demo aanvragen</a>
+      <a class="knop" href="index.html#demo">Praat met Hugo</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="over-hero">
+  <div class="wrap">
+    <span class="mono">[ Over HugoAI ]</span>
+    <h1 style="margin-top:22px">Elke zaak verdient een telefoon die wordt opgenomen.</h1>
+    <p class="lede">HugoAI bouwt AI-telefonisten voor het Nederlandse mkb: garages, restaurants, kapsalons, makelaars en andere zaken waar de telefoon gaat terwijl het werk doorgaat.</p>
+  </div>
+</div>
+
+<section style="border-top:1px solid var(--line)">
+  <div class="wrap twee">
+    <div class="kop in"><span class="mono">[ Waarom HugoAI ]</span><h2>Het vakwerk gaat voor. De telefoon wacht.</h2></div>
+    <div class="lopend in">
+      <p>In kleine zaken staat iedereen aan het werk: onder een auto, in de keuken, achter de stoel. Juist op die momenten gaat de telefoon. Wie dan niet opneemt, mist niet alleen een gesprek, maar vaak ook een klant.</p>
+      <p>Bij ons onderzoek naar garages lazen we in Google-reviews keer op keer dezelfde klacht: telefonisch slecht bereikbaar. HugoAI is gebouwd om precies dat op te lossen.</p>
+    </div>
+  </div>
+</section>
+
+<section class="anders">
+  <div class="wrap">
+    <div class="kop in"><span class="mono">[ Wat HugoAI anders maakt ]</span><h2>Een telefonist, geen keuzemenu.</h2></div>
+    <div class="punten">
+      <div class="punt in"><h3>Een gesprek, geen bandje</h3><p>Bellers komen niet in een keuzemenu of op een voicemail terecht. Hugo neemt op, luistert en helpt verder, zoals een vaste kracht aan de balie.</p></div>
+      <div class="punt in"><h3>Persoonlijk ingericht</h3><p>Elke telefonist wordt afgestemd op één zaak: de openingstijden, het aanbod, de werkwijze en de toon waarop jullie klanten te woord staan.</p></div>
+      <div class="punt in"><h3>Eerlijk over wat hij is</h3><p>Hugo is een AI-telefonist en zegt dat ook als iemand ernaar vraagt. Wat hij niet weet, verzint hij niet; hij legt de vraag vast voor opvolging.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="werkwijze" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="kop in"><span class="mono">[ Hoe het werkt ]</span><h2>Van kennismaking tot eerste gesprek.</h2></div>
+    <div class="stappen">
+      <div class="stap in"><span class="nr">1</span><h3>Kennismaking</h3><p>We brengen je zaak in kaart: openingstijden, diensten, prijzen en aanbod. Het meeste halen we van je eigen website.</p></div>
+      <div class="stap in"><span class="nr">2</span><h3>Je eigen demo</h3><p>Je ontvangt een link waarmee je Hugo belt met de naam van jouw zaak. Zo hoor je precies hoe hij jouw klanten te woord staat.</p></div>
+      <div class="stap in"><span class="nr">3</span><h3>Hugo neemt op</h3><p>Bevalt het, dan neemt Hugo de telefoon voor je aan. Na elk gesprek ontvang je een samenvatting: wie er belde, waarvoor en wat er is afgesproken.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:1px solid var(--line)">
+  <div class="wrap twee">
+    <div class="kop in"><span class="mono">[ Wie erachter zit ]</span><h2>Eén vast aanspreekpunt.</h2></div>
+    <div class="lopend in">
+      <p>HugoAI is opgericht door Hugo Jonas. Hij richt elke telefonist persoonlijk in en is je vaste contactpersoon, van de eerste demo tot het dagelijks gebruik.</p>
+      <p>Vragen of ideeën? Mail rechtstreeks naar <a href="mailto:hugo@hugoai.nl">hugo@hugoai.nl</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slot">
+  <div class="wrap">
+    <div class="kop in">
+      <span class="mono">[ Demo aanvragen ]</span>
+      <h2>Hoor Hugo met de naam van jouw zaak.</h2>
+      <p>We stellen een demo samen met de naam, openingstijden en het aanbod van jouw zaak, en sturen je de link per e-mail.</p>
+      <div class="hero-knoppen">
+        <a class="knop" href="index.html#aanvragen">Vraag een demo aan</a>
+        <a class="knop knop-rand" href="index.html#demo">Praat met Hugo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="voet">
+  <div class="wrap voet-raster">
+    <div class="voet-merk">
+      <a class="merk" href="index.html"><i></i>HugoAI</a>
+      <p>De telefonist die altijd opneemt.</p>
+      <a class="knop" href="index.html#demo">Praat met Hugo</a>
+    </div>
+    <nav class="voet-kolom" aria-label="Product">
+      <p class="mono">Product</p>
+      <a href="index.html#demo">Live demo</a>
+      <a href="index.html#samenvatting">Samenvatting na elk gesprek</a>
+      <a href="#werkwijze">Hoe het werkt</a>
+      <a href="index.html#aanvragen">Prijzen</a>
+    </nav>
+    <nav class="voet-kolom" aria-label="Branches">
+      <p class="mono">Branches</p>
+      <a href="index.html#demo-garage">Garages</a>
+      <a href="index.html#demo-restaurant">Restaurants</a>
+      <a href="index.html#demo-kapsalon">Kapsalons</a>
+      <a href="index.html#demo-makelaar">Makelaars</a>
+    </nav>
+    <nav class="voet-kolom" aria-label="Bedrijf">
+      <p class="mono">Bedrijf</p>
+      <a href="over.html">Over HugoAI</a>
+      <a href="mailto:hugo@hugoai.nl">Contact</a>
+      <a href="index.html#aanvragen">Demo aanvragen</a>
+    </nav>
+  </div>
+  <div class="wrap voet-onder">
+    <span>© <span id="jaar">2026</span> HugoAI</span>
+    <a href="mailto:hugo@hugoai.nl">hugo@hugoai.nl</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var nav = document.getElementById("nav");
+  addEventListener("scroll", function () { nav.classList.toggle("rand", scrollY > 8); }, { passive: true });
+
+  // rustig scrollen binnen deze pagina
+  var rustig = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var nr = 0;
+  ["wheel", "touchstart", "keydown"].forEach(function (ev) { addEventListener(ev, function () { nr++; }, { passive: true }); });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var doel = document.querySelector(a.getAttribute("href"));
+    if (!doel) return;
+    e.preventDefault();
+    var y = Math.max(0, doel.getBoundingClientRect().top + scrollY - nav.offsetHeight - 8);
+    if (rustig) { scrollTo(0, y); return; }
+    var mijn = ++nr, start = scrollY, d = y - start, t0 = null, duur = Math.min(1500, Math.max(800, Math.abs(d) * 0.55));
+    requestAnimationFrame(function stap(ts) {
+      if (mijn !== nr) return;
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / duur), k = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      scrollTo(0, start + d * k);
+      if (p < 1) requestAnimationFrame(stap);
+    });
+  });
+
+  var items = document.querySelectorAll(".in");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("zien"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    items.forEach(function (el) { io.observe(el); });
+  } else items.forEach(function (el) { el.classList.add("zien"); });
+
+  document.getElementById("jaar").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
