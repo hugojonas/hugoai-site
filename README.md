@@ -9,14 +9,15 @@ Dit is een **losse, schone repo met alléén de website** — bewust los van het
 |---|---|
 | `index.html` | Homepage: demo-blok, samenvatting, branches, aanvraagformulier (JS inline) |
 | `over.html` | Over HugoAI en de werkwijze |
+| `privacy.html` | Privacyverklaring (diensten per soort genoemd, zonder bedrijfsnamen) |
 | `stijl.css` | Gedeelde stijl voor beide pagina's (fonts via Google Fonts) |
 | `kunstbeeld.png` | Kunstbeeld van het telefoonsnoer, alleen bovenaan de homepage |
 | `vlak-petrol.png`, `vlak-zand.png` | Geschilderde korrelvlakken achter de telefoon en de samenvatting |
 | `og-image.png` | Oude preview-afbeelding (oud ontwerp, wordt nog niet gebruikt; komt een nieuwe) |
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
-| `sitemap.xml` | Sitemap (homepage + over) |
+| `sitemap.xml` | Sitemap (homepage, over, privacy) |
 
-> De Garage-demo belt echt: hij verbindt via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden.
+> De Garage-demo belt echt: hij verbindt via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden. Onder de belknop van Garage staat dat het gesprek wordt opgenomen, met een link naar `privacy.html`.
 
 > Contactformulier post naar Formspree: `https://formspree.io/f/xrewjzvl`.
 
@@ -57,7 +58,7 @@ Vanaf nu: **elke `git push` = de site update automatisch live.** Nooit meer hand
 Live op **https://hugoai.nl** (Vercel, auto-deploy).
 - [x] `robots.txt` + `sitemap.xml` met echte domein `hugoai.nl`.
 - [ ] Nieuw ontwerp (31 okt 2026) mist nog: `canonical`, `og:`/`twitter:`-tags, Organization-schema, favicon en een nieuwe `og-image.png` in de nieuwe stijl.
-- [ ] Privacyverklaring (`privacy.html`) + melding "Het gesprek wordt opgenomen" bij de Garage-demo.
+- [x] Privacyverklaring (`privacy.html`) + melding "Het gesprek wordt opgenomen" bij de Garage-demo (31 okt 2026).
 - [ ] Site aanmelden bij [Google Search Console](https://search.google.com/search-console) en sitemap indienen.
 - [ ] (optioneel) Google Bedrijfsprofiel aanmaken voor branded search.
 - [ ] (optioneel) `www.hugoai.nl` toevoegen in Vercel.

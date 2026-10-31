@@ -193,7 +193,7 @@
   </div>
   <div class="wrap voet-onder">
     <span>© <span id="jaar">2026</span> HugoAI</span>
-    <a href="mailto:hugo@hugoai.nl">hugo@hugoai.nl</a>
+    <span class="voet-links"><a href="privacy.html">Privacy</a><a href="mailto:hugo@hugoai.nl">hugo@hugoai.nl</a></span>
   </div>
 </footer>
 
@@ -349,7 +349,7 @@
     document.getElementById("eilandNaam").textContent = z === "hugoai" ? "Hugo · HugoAI" : ZAKEN[z].kop;
     document.getElementById("probeer").textContent = ZAKEN[z].probeer;
     document.getElementById("podiumLabel").textContent = ZAKEN[z].sector ? "Live · je praat echt met Hugo" : "Voorbeeld · de echte demo komt hier";
-    document.getElementById("schermNoot").textContent = ZAKEN[z].sector ? "Je browser vraagt om je microfoon." : "Dit gesprek is nagespeeld.";
+    document.getElementById("schermNoot").innerHTML = ZAKEN[z].sector ? 'Je browser vraagt om je microfoon.<br>Het gesprek wordt opgenomen. <a href="privacy.html#gesprek">Privacy</a>' : "Dit gesprek is nagespeeld.";
     toonZin("hugo", ZAKEN[z].stil, true);
     document.querySelectorAll(".keuze").forEach(function (k) {
       var aan = k.dataset.zaak === z;
