@@ -61,7 +61,7 @@
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="makelaar"><span>Makelaar</span><small>Voorbeeldmakelaar</small></button>
       </div>
       <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Wat krijg ik na een gesprek?”</em></p>
-      <p class="verzonnen">De voorbeeldzaken zijn fictief.</p>
+      <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken met de garage worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
     </div>
 
     <div class="podium in" id="podium">
@@ -349,7 +349,7 @@
     document.getElementById("eilandNaam").textContent = z === "hugoai" ? "Hugo · HugoAI" : ZAKEN[z].kop;
     document.getElementById("probeer").textContent = ZAKEN[z].probeer;
     document.getElementById("podiumLabel").textContent = ZAKEN[z].sector ? "Live · je praat echt met Hugo" : "Voorbeeld · de echte demo komt hier";
-    document.getElementById("schermNoot").innerHTML = ZAKEN[z].sector ? 'Je browser vraagt om je microfoon.<br>Het gesprek wordt opgenomen. <a href="privacy.html#gesprek">Privacy</a>' : "Dit gesprek is nagespeeld.";
+    document.getElementById("schermNoot").textContent = ZAKEN[z].sector ? "Je browser vraagt om je microfoon." : "Dit gesprek is nagespeeld.";
     toonZin("hugo", ZAKEN[z].stil, true);
     document.querySelectorAll(".keuze").forEach(function (k) {
       var aan = k.dataset.zaak === z;

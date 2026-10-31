@@ -17,7 +17,7 @@ Dit is een **losse, schone repo met alléén de website** — bewust los van het
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
 | `sitemap.xml` | Sitemap (homepage, over, privacy) |
 
-> De Garage-demo belt echt: hij verbindt via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden. Onder de belknop van Garage staat dat het gesprek wordt opgenomen, met een link naar `privacy.html`.
+> De Garage-demo belt echt: hij verbindt via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden. Links onder de keuzes staat dat gesprekken met de garage worden opgenomen, met een link naar `privacy.html`.
 
 > Contactformulier post naar Formspree: `https://formspree.io/f/xrewjzvl`.
 

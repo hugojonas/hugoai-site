@@ -81,6 +81,7 @@ section{padding:120px 0}
 .kop .probeer-zin .mono{display:inline;margin:0 10px 0 0}
 .probeer-zin em{font-family:'Source Serif 4',serif;font-style:italic;font-size:21px;color:var(--ink)}
 .kop .verzonnen{font-size:13.5px;color:var(--soft);margin-top:8px}
+.verzonnen a{color:inherit;text-underline-offset:3px}
 .demo .podium{height:640px;background:#3c5653 url(vlak-petrol.png) center/cover no-repeat}
 .stem{position:absolute;left:0;right:0;top:66px;z-index:2;text-align:center;padding:0 36px}
 .wie-praat{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(243,239,231,.7)}
@@ -120,7 +121,6 @@ section{padding:120px 0}
 .pil.rood:hover{background:#e65a4e}
 .pil.uit{background:#fff;color:var(--ink)}
 .scherm-noot{font-size:12.5px;color:#7f8580;text-align:center;margin-top:12px}
-.scherm-noot a{color:inherit;text-underline-offset:3px}
 
 /* samenvatting */
 .samen-raster{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
