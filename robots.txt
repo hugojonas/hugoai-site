@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hugoai.nl/sitemap.xml
+Sitemap: https://www.hugoai.nl/sitemap.xml

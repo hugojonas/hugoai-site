@@ -13,7 +13,8 @@ Dit is een **losse, schone repo met alléén de website** — bewust los van het
 | `stijl.css` | Gedeelde stijl voor beide pagina's (fonts via Google Fonts) |
 | `kunstbeeld.png` | Kunstbeeld van het telefoonsnoer, alleen bovenaan de homepage |
 | `vlak-petrol.png`, `vlak-zand.png` | Geschilderde korrelvlakken achter de telefoon en de samenvatting |
-| `og-image.png` | Oude preview-afbeelding (oud ontwerp, wordt nog niet gebruikt; komt een nieuwe) |
+| `og-image.jpg` | Deelplaatje (1200×630): slogan + telefoonsnoer, zoals de bovenkant van de site |
+| `favicon.svg`, `favicon-48.png`, `apple-touch-icon.png` | Icoontje: de petrol stip uit het logo op een crème tegel |
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
 | `sitemap.xml` | Sitemap (homepage, over, privacy) |
 
@@ -56,8 +57,8 @@ Vanaf nu: **elke `git push` = de site update automatisch live.** Nooit meer hand
 
 ## SEO — status
 Live op **https://hugoai.nl** (Vercel, auto-deploy).
-- [x] `robots.txt` + `sitemap.xml` met echte domein `hugoai.nl`.
-- [ ] Nieuw ontwerp (31 okt 2026) mist nog: `canonical`, `og:`/`twitter:`-tags, Organization-schema, favicon en een nieuwe `og-image.png` in de nieuwe stijl.
+- [x] `robots.txt` + `sitemap.xml` op `https://www.hugoai.nl/` (hugoai.nl stuurt door naar www).
+- [x] `canonical`, `og:`/`twitter:`-tags en favicon op alle pagina's; Organization-schema op de homepage (1 nov 2026).
 - [x] Privacyverklaring (`privacy.html`) + melding "Het gesprek wordt opgenomen" bij de Garage-demo (31 okt 2026).
 - [ ] Site aanmelden bij [Google Search Console](https://search.google.com/search-console) en sitemap indienen.
 - [ ] (optioneel) Google Bedrijfsprofiel aanmaken voor branded search.
