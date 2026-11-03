@@ -83,13 +83,13 @@
     <div class="kop in">
       <span class="mono">[ Live demo ]</span>
       <h2>Praat met Hugo.</h2>
-      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Stel je vragen over HugoAI, of ervaar hoe hij de telefoon aanneemt voor een garage, restaurant, kapsalon of makelaar.</p>
+      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Stel je vragen over HugoAI, of ervaar hoe hij de telefoon aanneemt voor een garage, restaurant, kapsalon of fysiopraktijk.</p>
       <div class="kies" role="tablist" aria-label="Kies met wie je praat">
         <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="hugoai"><span>Over HugoAI</span><small>Wat het is en hoe het werkt</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="restaurant"><span>Restaurant</span><small>Voorbeeldrestaurant</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Voorbeeldsalon</small></button>
-        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="makelaar"><span>Makelaar</span><small>Voorbeeldmakelaar</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="fysio"><span>Fysiopraktijk</span><small>Voorbeeldpraktijk</small></button>
       </div>
       <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Wat krijg ik na een gesprek?”</em></p>
       <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken met de garage worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
@@ -164,7 +164,7 @@
       <div class="zaak in"><span class="mono">Garage</span><q>Kan mijn auto donderdag voor de APK?</q><p>APK, onderhoud of een proefrit: Hugo legt de afspraak vast, inclusief kenteken en contactgegevens.</p><a class="bel-zaak" href="#demo" data-zaak="garage">Bel deze zaak →</a></div>
       <div class="zaak in"><span class="mono">Restaurant</span><q>Hebben jullie zaterdag nog een tafel voor vier?</q><p>Reserveringen, groepsgrootte en dieetwensen worden direct en volledig genoteerd.</p><a class="bel-zaak" href="#demo" data-zaak="restaurant">Bel deze zaak →</a></div>
       <div class="zaak in"><span class="mono">Kapsalon</span><q>Kan ik morgen nog geknipt worden?</q><p>Hugo stemt een tijdstip af en legt de gewenste behandeling vast.</p><a class="bel-zaak" href="#demo" data-zaak="kapsalon">Bel deze zaak →</a></div>
-      <div class="zaak in"><span class="mono">Makelaar</span><q>Is het huis aan de Lindelaan nog te koop?</q><p>Hugo informeert over het aanbod en registreert geïnteresseerden voor een bezichtiging.</p><a class="bel-zaak" href="#demo" data-zaak="makelaar">Bel deze zaak →</a></div>
+      <div class="zaak in"><span class="mono">Fysiopraktijk</span><q>Heb ik een verwijzing van de huisarts nodig?</q><p>Hugo beantwoordt vragen over de praktijk en plant direct een eerste afspraak in.</p><a class="bel-zaak" href="#demo" data-zaak="fysio">Bel deze zaak →</a></div>
     </div>
   </div>
 </section>
@@ -213,7 +213,7 @@
       <a class="kies-zaak" href="#demo" data-zaak="garage">Garages</a>
       <a class="kies-zaak" href="#demo" data-zaak="restaurant">Restaurants</a>
       <a class="kies-zaak" href="#demo" data-zaak="kapsalon">Kapsalons</a>
-      <a class="kies-zaak" href="#demo" data-zaak="makelaar">Makelaars</a>
+      <a class="kies-zaak" href="#demo" data-zaak="fysio">Fysiopraktijken</a>
     </nav>
     <nav class="voet-kolom" aria-label="Bedrijf">
       <p class="mono">Bedrijf</p>
@@ -297,12 +297,12 @@
       [8000, "hugo", "Hugo", "Morgen is er nog plek om tien uur of om half vier. Wat past u beter?"],
       [12200, "jij", "Jij", "Half vier."],
       [14000, "hugo", "Hugo", "Prima, half vier. Mag ik uw naam?"]] },
-    makelaar: { stil: "Bel de makelaar. Ik neem op.", kop: "Makelaar", rol: "telefonist van een voorbeeldmakelaar", probeer: "“Is het huis aan de Lindelaan nog te koop?”", lijn: [
-      [2200, "hugo", "Hugo", "Goedemiddag, waarmee kan ik u helpen?"],
-      [5600, "jij", "Jij", "Is het huis aan de Lindelaan nog te koop?"],
-      [8400, "hugo", "Hugo", "Ja, dat staat nog te koop. Wilt u het komen bekijken?"],
-      [11800, "jij", "Jij", "Graag, volgende week."],
-      [14000, "hugo", "Hugo", "Dat kan dinsdag of donderdag. Wat past u beter?"]] }
+    fysio: { stil: "Bel de fysiopraktijk. Ik neem op.", kop: "Fysiopraktijk", rol: "telefonist van een voorbeeldpraktijk", probeer: "“Heb ik een verwijzing van de huisarts nodig?”", lijn: [
+      [2200, "hugo", "Hugo", "Goedemorgen, waarmee kan ik u helpen?"],
+      [5600, "jij", "Jij", "Heb ik een verwijzing van de huisarts nodig?"],
+      [8400, "hugo", "Hugo", "Nee, u kunt zonder verwijzing bij ons terecht. Wilt u een afspraak maken?"],
+      [12600, "jij", "Jij", "Graag, deze week nog."],
+      [14600, "hugo", "Hugo", "Dat kan donderdag om half elf. Past dat?"]] }
   };
   var zaak = "hugoai";
   // Echte gesprekken. Nu nog Hugo's laptop via ngrok; later de server die altijd aanstaat.
