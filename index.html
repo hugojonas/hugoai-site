@@ -88,11 +88,11 @@
         <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="hugoai"><span>Over HugoAI</span><small>Wat het is en hoe het werkt</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="restaurant"><span>Restaurant</span><small>Voorbeeldrestaurant</small></button>
-        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Voorbeeldsalon</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Live · Kapsalon De Vlecht</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="fysio"><span>Fysiopraktijk</span><small>Voorbeeldpraktijk</small></button>
       </div>
       <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Wat krijg ik na een gesprek?”</em></p>
-      <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken met de garage worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
+      <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken met de garage en de kapsalon worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
     </div>
 
     <div class="podium in" id="podium">
@@ -291,7 +291,7 @@
       [8400, "hugo", "Hugo", "Zaterdag kan om zes uur of om half negen. Wat komt u het beste uit?"],
       [12600, "jij", "Jij", "Zes uur graag."],
       [14600, "hugo", "Hugo", "Genoteerd. Zijn er allergieën waar de keuken rekening mee moet houden?"]] },
-    kapsalon: { stil: "Bel de kapsalon. Ik neem op.", kop: "Kapsalon", rol: "telefonist van een voorbeeldsalon", probeer: "“Kan ik morgen nog geknipt worden?”", lijn: [
+    kapsalon: { stil: "Bel Kapsalon De Vlecht. Ik neem op.", kop: "Kapsalon De Vlecht", rol: "telefonist van Kapsalon De Vlecht", probeer: "“Kan ik morgen nog geknipt worden?”", lijn: [
       [2200, "hugo", "Hugo", "Goedemorgen, waarmee kan ik u helpen?"],
       [5400, "jij", "Jij", "Kan ik morgen nog geknipt worden?"],
       [8000, "hugo", "Hugo", "Morgen is er nog plek om tien uur of om half vier. Wat past u beter?"],
@@ -308,6 +308,7 @@
   // Echte gesprekken. Nu nog Hugo's laptop via ngrok; later de server die altijd aanstaat.
   var HUGO_SERVER = "banana-gaffe-pyramid.ngrok-free.dev";
   ZAKEN.garage.sector = "autobedrijf-lindehof_v3";
+  ZAKEN.kapsalon.sector = "kapsalon-de-vlecht";
   var echt = null;
   var podium = document.getElementById("podium");
   var zinEl = document.getElementById("zin");
