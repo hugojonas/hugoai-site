@@ -83,37 +83,43 @@
     <div class="kop in">
       <span class="mono">[ Live demo ]</span>
       <h2>Praat met Hugo.</h2>
-      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Stel je vragen over HugoAI, of ervaar hoe hij de telefoon aanneemt voor een garage, restaurant, kapsalon of fysiopraktijk.</p>
+      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Ervaar hoe hij de telefoon aanneemt voor een garage of een kapsalon.</p>
       <div class="kies" role="tablist" aria-label="Kies met wie je praat">
-        <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="hugoai"><span>Over HugoAI</span><small>Wat het is en hoe het werkt</small></button>
-        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
-        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="restaurant"><span>Restaurant</span><small>Voorbeeldrestaurant</small></button>
+        <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Live · Kapsalon De Vlecht</small></button>
-        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="fysio"><span>Fysiopraktijk</span><small>Voorbeeldpraktijk</small></button>
       </div>
-      <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Wat krijg ik na een gesprek?”</em></p>
-      <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken met de garage en de kapsalon worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
+      <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Kan mijn auto donderdag voor de APK?”</em></p>
+      <p class="verzonnen">De voorbeeldzaken zijn fictief. Gesprekken worden opgenomen. <a href="privacy.html#gesprek">Privacy</a></p>
     </div>
 
     <div class="podium in" id="podium">
-      <span class="podium-label mono" id="podiumLabel">Voorbeeld · de echte demo komt hier</span>
-      <div class="stem" aria-live="polite">
-        <p class="wie-praat" id="wiePraat">Hugo</p>
-        <p class="zin" id="zin"></p>
-      </div>
-      <svg class="snoer" id="snoer" aria-hidden="true"><path id="snoerSchaduw"/><path id="snoerAchter"/><path id="snoerLijn"/></svg>
-      <div class="telefoon">
-        <div class="scherm">
-          <div class="eiland"><span class="naam" id="eilandNaam">Hugo · HugoAI</span><span class="tijd" id="tijd">0:00</span></div>
-          <p class="scherm-status" id="status">// klaar om te bellen</p>
-          <div class="scherm-knoppen knoppen-rust">
-            <button class="pil" id="bel" type="button"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span>Bel Hugo</span></button>
+      <div class="tel">
+        <i class="tel-zij a"></i><i class="tel-zij b"></i><i class="tel-zij c"></i><i class="tel-zij d"></i>
+        <div class="tel-scherm">
+          <div class="tel-eiland"></div>
+          <div class="tel-balk">
+            <div id="balkKlok"></div>
+            <div class="tel-rechts"><span class="tel-staaf"><i></i><i></i><i></i><i></i></span><span class="tel-accu"></span></div>
           </div>
-          <div class="scherm-knoppen knoppen-bellen">
-            <button class="pil" id="dempen" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4"/></svg>Dempen</button>
-            <button class="pil rood" id="ophangen" type="button"><svg viewBox="0 0 24 24" style="transform:rotate(135deg)"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Ophangen</button>
+          <div class="tel-lock" id="lock">
+            <div class="tel-klok">
+              <div class="tel-dag" id="dag"></div>
+              <div class="tel-uur" id="uur"></div>
+            </div>
+            <div class="tel-onder">
+              <p class="tel-melding" id="melding" role="status"></p>
+              <div class="tel-spoor" id="spoor">
+                <div class="tel-hint" id="hint">schuif om te bellen</div>
+                <button class="tel-greep los" id="greep" type="button" aria-label="Bel Hugo"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></button>
+              </div>
+              <div class="tel-op">
+                <button class="tel-rood" id="ophangen" type="button" aria-label="Ophangen"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg></button>
+                <span>Ophangen</span>
+              </div>
+              <div class="tel-noot">Demo · gesprek wordt opgenomen</div>
+              <div class="tel-streep"></div>
+            </div>
           </div>
-          <p class="scherm-noot" id="schermNoot">Dit gesprek is nagespeeld.</p>
         </div>
       </div>
     </div>
@@ -162,9 +168,7 @@
     </div>
     <div class="zaken-rij">
       <div class="zaak in"><span class="mono">Garage</span><q>Kan mijn auto donderdag voor de APK?</q><p>APK, onderhoud of een proefrit: Hugo legt de afspraak vast, inclusief kenteken en contactgegevens.</p><a class="bel-zaak" href="#demo" data-zaak="garage">Bel deze zaak →</a></div>
-      <div class="zaak in"><span class="mono">Restaurant</span><q>Hebben jullie zaterdag nog een tafel voor vier?</q><p>Reserveringen, groepsgrootte en dieetwensen worden direct en volledig genoteerd.</p><a class="bel-zaak" href="#demo" data-zaak="restaurant">Bel deze zaak →</a></div>
       <div class="zaak in"><span class="mono">Kapsalon</span><q>Kan ik morgen nog geknipt worden?</q><p>Hugo stemt een tijdstip af en legt de gewenste behandeling vast.</p><a class="bel-zaak" href="#demo" data-zaak="kapsalon">Bel deze zaak →</a></div>
-      <div class="zaak in"><span class="mono">Fysiopraktijk</span><q>Heb ik een verwijzing van de huisarts nodig?</q><p>Hugo beantwoordt vragen over de praktijk en plant direct een eerste afspraak in.</p><a class="bel-zaak" href="#demo" data-zaak="fysio">Bel deze zaak →</a></div>
     </div>
   </div>
 </section>
@@ -211,9 +215,7 @@
     <nav class="voet-kolom" aria-label="Branches">
       <p class="mono">Branches</p>
       <a class="kies-zaak" href="#demo" data-zaak="garage">Garages</a>
-      <a class="kies-zaak" href="#demo" data-zaak="restaurant">Restaurants</a>
       <a class="kies-zaak" href="#demo" data-zaak="kapsalon">Kapsalons</a>
-      <a class="kies-zaak" href="#demo" data-zaak="fysio">Fysiopraktijken</a>
     </nav>
     <nav class="voet-kolom" aria-label="Bedrijf">
       <p class="mono">Bedrijf</p>
@@ -271,118 +273,65 @@
     items.forEach(function (el) { io.observe(el); });
   } else items.forEach(function (el) { el.classList.add("zien"); });
 
-  // Voorbeeld van het belscherm. Wordt vervangen door de echte demo.
+  // De telefoon in de demo. Elke zaak hier is een echte demo op de server.
   var ZAKEN = {
-    hugoai: { stil: "Bel me en vraag wat je wilt weten.", kop: "HugoAI", rol: "vertelt over HugoAI", probeer: "“Wat krijg ik na een gesprek?”", lijn: [
-      [2200, "hugo", "Hugo", "Hoi, met Hugo. Vraag me gerust wat je wilt weten."],
-      [6200, "jij", "Jij", "Wat doe je precies?"],
-      [8400, "hugo", "Hugo", "Ik neem de telefoon op voor jouw zaak, beantwoord vragen en maak afspraken."],
-      [13200, "jij", "Jij", "En wat krijg ik na een gesprek?"],
-      [15400, "hugo", "Hugo", "Een samenvatting: wie er belde, waarvoor, en wat we hebben afgesproken."]] },
-    garage: { stil: "Bel Autobedrijf Lindehof. Ik neem op.", kop: "Autobedrijf Lindehof", rol: "telefonist van Autobedrijf Lindehof", probeer: "“Kan mijn auto donderdag voor de APK?”", lijn: [
-      [2200, "hugo", "Hugo", "Autobedrijf Lindehof, goedemorgen. Waarmee kan ik u helpen?"],
-      [6000, "jij", "Jij", "Goedemorgen, ik wil graag een testrit plannen."],
-      [8800, "hugo", "Hugo", "Zeker, om welke auto gaat het?"],
-      [11800, "jij", "Jij", "Heb je iets elektrisch staan?"],
-      [14400, "hugo", "Hugo", "We hebben op dit moment geen volledig elektrische auto’s in de voorraad. Heeft u ook interesse in een hybride?"]] },
-    restaurant: { stil: "Bel het restaurant. Ik neem op.", kop: "Restaurant", rol: "telefonist van een voorbeeldrestaurant", probeer: "“Hebben jullie zaterdag nog een tafel voor vier?”", lijn: [
-      [2200, "hugo", "Hugo", "Goedemiddag, waarmee kan ik u helpen?"],
-      [5600, "jij", "Jij", "Hebben jullie zaterdag nog een tafel voor vier?"],
-      [8400, "hugo", "Hugo", "Zaterdag kan om zes uur of om half negen. Wat komt u het beste uit?"],
-      [12600, "jij", "Jij", "Zes uur graag."],
-      [14600, "hugo", "Hugo", "Genoteerd. Zijn er allergieën waar de keuken rekening mee moet houden?"]] },
-    kapsalon: { stil: "Bel Kapsalon De Vlecht. Ik neem op.", kop: "Kapsalon De Vlecht", rol: "telefonist van Kapsalon De Vlecht", probeer: "“Kan ik morgen nog geknipt worden?”", lijn: [
-      [2200, "hugo", "Hugo", "Goedemorgen, waarmee kan ik u helpen?"],
-      [5400, "jij", "Jij", "Kan ik morgen nog geknipt worden?"],
-      [8000, "hugo", "Hugo", "Morgen is er nog plek om tien uur of om half vier. Wat past u beter?"],
-      [12200, "jij", "Jij", "Half vier."],
-      [14000, "hugo", "Hugo", "Prima, half vier. Mag ik uw naam?"]] },
-    fysio: { stil: "Bel de fysiopraktijk. Ik neem op.", kop: "Fysiopraktijk", rol: "telefonist van een voorbeeldpraktijk", probeer: "“Heb ik een verwijzing van de huisarts nodig?”", lijn: [
-      [2200, "hugo", "Hugo", "Goedemorgen, waarmee kan ik u helpen?"],
-      [5600, "jij", "Jij", "Heb ik een verwijzing van de huisarts nodig?"],
-      [8400, "hugo", "Hugo", "Nee, u kunt zonder verwijzing bij ons terecht. Wilt u een afspraak maken?"],
-      [12600, "jij", "Jij", "Graag, deze week nog."],
-      [14600, "hugo", "Hugo", "Dat kan donderdag om half elf. Past dat?"]] }
+    garage: { kop: "Autobedrijf Lindehof", sector: "autobedrijf-lindehof_v3", probeer: "“Kan mijn auto donderdag voor de APK?”" },
+    kapsalon: { kop: "Kapsalon De Vlecht", sector: "kapsalon-de-vlecht", probeer: "“Kan ik morgen nog geknipt worden?”" }
   };
-  var zaak = "hugoai";
+  var zaak = "garage";
   // Echte gesprekken. Nu nog Hugo's laptop via ngrok; later de server die altijd aanstaat.
   var HUGO_SERVER = "banana-gaffe-pyramid.ngrok-free.dev";
-  ZAKEN.garage.sector = "autobedrijf-lindehof_v3";
-  ZAKEN.kapsalon.sector = "kapsalon-de-vlecht";
   var echt = null;
-  var podium = document.getElementById("podium");
-  var zinEl = document.getElementById("zin");
-  var wiePraat = document.getElementById("wiePraat");
-  var status = document.getElementById("status");
-  var tijd = document.getElementById("tijd");
-  var timers = [], woordTimers = [], klok = null, sec = 0;
-  var spreker = "stil";   // "hugo", "jij" of "stil": hoe sterk het snoer meegolft
+  var lock = document.getElementById("lock"), melding = document.getElementById("melding");
+  var spoor = document.getElementById("spoor"), greep = document.getElementById("greep"), hint = document.getElementById("hint");
+  var stand = "rust";   // "rust", "verbinden", "aan" of "klaar"
+  var sec = 0, klok = null, terug = null;
+  var links = 4, sleepend = false, bewogen = false, startX = 0;
 
-  var dempen = document.getElementById("dempen");
-  function zet(t) { status.textContent = t; }
-  function wisWoorden() { woordTimers.forEach(clearTimeout); woordTimers = []; }
-  function toonZin(soort, tekst, direct) {
-    wisWoorden();
-    wiePraat.textContent = soort === "jij" ? "Jij" : "Hugo";
-    zinEl.className = "zin" + (soort === "jij" ? " jij" : "");
-    zinEl.textContent = "";
-    var woorden = tekst.split(" ").map(function (w, i) {
-      var sp = document.createElement("span");
-      sp.className = "w"; sp.textContent = w;
-      zinEl.appendChild(sp);
-      zinEl.appendChild(document.createTextNode(" "));
-      return sp;
-    });
-    if (direct || rustigScroll) { woorden.forEach(function (w) { w.classList.add("aan"); }); return; }
-    var stap = soort === "jij" ? 150 : 230;
-    woorden.forEach(function (w, i) {
-      woordTimers.push(setTimeout(function () {
-        if (soort === "hugo") { woorden.forEach(function (x) { x.classList.remove("nieuw"); }); w.classList.add("nieuw"); }
-        w.classList.add("aan");
-        if (i === woorden.length - 1) woordTimers.push(setTimeout(function () { spreker = "stil"; }, 300));
-      }, i * stap));
-    });
-    spreker = soort;
-    zet(soort === "hugo" ? "// Hugo praat" : "// Hugo luistert");
+  function pad(n) { return String(n).padStart(2, "0"); }
+  function toonTelefoon() {
+    var d = new Date(), nu = pad(d.getHours()) + ":" + pad(d.getMinutes());
+    document.getElementById("balkKlok").textContent = nu;
+    document.getElementById("dag").textContent = stand === "rust" ? d.toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long" })
+      : stand === "verbinden" ? "verbinden…"
+      : stand === "klaar" ? "gesprek beëindigd"
+      : ZAKEN[zaak].kop;
+    document.getElementById("uur").textContent = stand === "rust" ? nu : pad(Math.floor(sec / 60)) + ":" + pad(sec % 60);
+    lock.className = "tel-lock" + (stand === "rust" ? "" : " " + stand);
   }
-  function mmss(n) { return Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0"); }
-  function rust() {
-    stopEcht();
-    timers.forEach(clearTimeout); timers = []; wisWoorden();
-    if (klok) clearInterval(klok); klok = null;
-    spreker = "stil";
+  function schuif(x) {
+    var m = spoor.clientWidth - greep.offsetWidth - links;
+    x = Math.max(links, Math.min(m, x));
+    greep.style.left = x + "px";
+    hint.style.opacity = String(1 - Math.min(1, (x - links) / (m - links) * 1.5));
+  }
+  function stopKlok() {
+    if (klok) clearInterval(klok);
+    klok = null;
+    clearTimeout(terug);
+  }
+  function naarRust() {
+    stand = "rust"; sec = 0;
+    toonTelefoon();
+    schuif(links);
   }
   function bel() {
-    rust();
-    dempen.classList.remove("uit");
-    if (ZAKEN[zaak].sector) { belEcht(ZAKEN[zaak].sector); return; }
-    sec = 0; tijd.textContent = "0:00";
-    podium.classList.add("belt");
-    zet("// Hugo wordt opgestart");
-    timers.push(setTimeout(function () {
-      zet("// verbonden");
-      klok = setInterval(function () { sec++; tijd.textContent = mmss(sec); }, 1000);
-    }, 1200));
-    ZAKEN[zaak].lijn.forEach(function (r) { timers.push(setTimeout(function () { toonZin(r[1], r[3]); }, r[0])); });
+    if (stand !== "rust") return;
+    belEcht(ZAKEN[zaak].sector);
   }
   function ophangen() {
-    rust();
-    podium.classList.remove("belt");
-    zet("// gesprek beëindigd");
-    document.querySelector("#bel span").textContent = "Opnieuw bellen";
+    stopEcht(); stopKlok();
+    stand = "klaar";
+    toonTelefoon();
+    terug = setTimeout(naarRust, 2400);
   }
   function kies(z) {
     if (!ZAKEN[z]) return;
     zaak = z;
-    rust();
-    podium.classList.remove("belt");
-    sec = 0; tijd.textContent = "0:00"; zet("// klaar om te bellen");
-    document.querySelector("#bel span").textContent = "Bel Hugo";
-    document.getElementById("eilandNaam").textContent = z === "hugoai" ? "Hugo · HugoAI" : ZAKEN[z].kop;
+    stopEcht(); stopKlok();
+    melding.textContent = "";
+    naarRust();
     document.getElementById("probeer").textContent = ZAKEN[z].probeer;
-    document.getElementById("podiumLabel").textContent = ZAKEN[z].sector ? "Live · je praat echt met Hugo" : "Voorbeeld · de echte demo komt hier";
-    document.getElementById("schermNoot").textContent = ZAKEN[z].sector ? "Je browser vraagt om je microfoon." : "Dit gesprek is nagespeeld.";
-    toonZin("hugo", ZAKEN[z].stil, true);
     document.querySelectorAll(".keuze").forEach(function (k) {
       var aan = k.dataset.zaak === z;
       k.classList.toggle("actief", aan); k.setAttribute("aria-selected", aan ? "true" : "false");
@@ -398,12 +347,38 @@
       scrollTo(0, Math.max(0, d.getBoundingClientRect().top + scrollY - nav.offsetHeight - 8));
     }, 60);
   }
-  document.getElementById("bel").addEventListener("click", bel);
   document.getElementById("ophangen").addEventListener("click", ophangen);
-  dempen.addEventListener("click", function () {
-    dempen.classList.toggle("uit");
-    if (echt) echt.gedempt = dempen.classList.contains("uit");
-  });
+
+  // Het schuifknopje. Klikken mag ook, voor wie niet doorheeft dat het schuift.
+  function pak(e) {
+    if (stand !== "rust") return;
+    sleepend = true; bewogen = false;
+    greep.classList.remove("los");
+    startX = (e.touches ? e.touches[0].clientX : e.clientX) - parseFloat(greep.style.left || links);
+    e.preventDefault();
+  }
+  function sleep(e) {
+    if (!sleepend) return;
+    bewogen = true;
+    schuif((e.touches ? e.touches[0].clientX : e.clientX) - startX);
+    e.preventDefault();
+  }
+  function laatLos() {
+    if (!sleepend) return;
+    sleepend = false;
+    greep.classList.add("los");
+    var m = spoor.clientWidth - greep.offsetWidth - links;
+    if (!bewogen || parseFloat(greep.style.left || links) > m * 0.72) { schuif(m); bel(); }
+    else schuif(links);
+  }
+  greep.addEventListener("mousedown", pak);
+  addEventListener("mousemove", sleep);
+  addEventListener("mouseup", laatLos);
+  greep.addEventListener("touchstart", pak, { passive: false });
+  greep.addEventListener("touchmove", sleep, { passive: false });
+  greep.addEventListener("touchend", laatLos);
+  greep.addEventListener("click", function (e) { if (e.detail === 0) { schuif(spoor.clientWidth); bel(); } });   // met het toetsenbord
+  spoor.addEventListener("click", function (e) { if (e.target === spoor) { schuif(spoor.clientWidth); bel(); } });
 
   // ---- Echt gesprek: geluid heen en weer met de server (Int16, mono, 16 kHz), net als de demopagina ----
   function stopEcht() {
@@ -415,28 +390,15 @@
     if (e.ctx) { try { e.ctx.close(); } catch (x) {} }
   }
   function mislukt(tekst) {
-    stopEcht();
-    if (klok) clearInterval(klok); klok = null;
-    spreker = "stil";
-    podium.classList.remove("belt");
-    zet("// niet verbonden");
-    toonZin("hugo", tekst, true);
-    document.querySelector("#bel span").textContent = "Opnieuw bellen";
-  }
-  function echteZin(wie) {
-    if (!echt || echt.laatste === wie) return;
-    echt.laatste = wie;
-    wiePraat.textContent = wie === "hugo" ? "Hugo" : "Jij";
-    zinEl.className = "zin" + (wie === "hugo" ? "" : " jij");
-    zinEl.textContent = wie === "hugo" ? "Hugo praat…" : "Hugo luistert…";
-    zet(wie === "hugo" ? "// Hugo praat" : "// Hugo luistert");
+    stopEcht(); stopKlok();
+    naarRust();
+    melding.textContent = tekst;
   }
   async function belEcht(sector) {
-    var e = echt = { ws: null, ctx: null, mic: null, proc: null, stukken: [], volgende: 0, micNiveau: 0, gedempt: false, laatste: null, open: false, laatstHugo: 0 };
-    sec = 0; tijd.textContent = "0:00";
-    podium.classList.add("belt");
-    zet("// Hugo wordt opgestart");
-    toonZin("hugo", "Even verbinden…", true);
+    var e = echt = { ws: null, ctx: null, mic: null, proc: null, volgende: 0, open: false };
+    sec = 0; stand = "verbinden";
+    melding.textContent = "";
+    toonTelefoon();
     try {
       e.mic = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true } });
     } catch (x) { if (echt === e) mislukt("Geen toegang tot je microfoon. Geef toestemming in je browser en probeer het opnieuw."); return; }
@@ -451,21 +413,19 @@
     e.ws.onopen = function () {
       if (echt !== e) return;
       e.open = true;
-      zet("// verbonden");
-      toonZin("hugo", "Hugo neemt op…", true);
-      klok = setInterval(function () { sec++; tijd.textContent = mmss(sec); }, 1000);
+      stand = "aan";
+      toonTelefoon();
+      klok = setInterval(function () { sec++; toonTelefoon(); }, 1000);
       var bron = e.ctx.createMediaStreamSource(e.mic);
       e.proc = e.ctx.createScriptProcessor(512, 1, 1);
       e.proc.onaudioprocess = function (ev) {
         if (!e.ws || e.ws.readyState !== WebSocket.OPEN) return;
-        var f = ev.inputBuffer.getChannelData(0), i16 = new Int16Array(f.length), som = 0;
+        var f = ev.inputBuffer.getChannelData(0), i16 = new Int16Array(f.length);
         for (var i = 0; i < f.length; i++) {
-          var v = e.gedempt ? 0 : Math.max(-1, Math.min(1, f[i]));
-          som += v * v;
+          var v = Math.max(-1, Math.min(1, f[i]));
           i16[i] = v < 0 ? v * 32768 : v * 32767;
         }
-        e.micNiveau = Math.sqrt(som / f.length);
-        e.ws.send(i16.buffer);   // ook bij dempen: stilte blijven sturen, anders hangt de server na 30 s op
+        e.ws.send(i16.buffer);
       };
       bron.connect(e.proc);
       var stil = e.ctx.createGain(); stil.gain.value = 0;   // stil naar de uitgang, zodat het geluid blijft lopen
@@ -473,8 +433,8 @@
     };
     e.ws.onmessage = function (ev) {
       if (echt !== e || !(ev.data instanceof ArrayBuffer) || !ev.data.byteLength) return;
-      var i16 = new Int16Array(ev.data), f = new Float32Array(i16.length), som = 0;
-      for (var i = 0; i < i16.length; i++) { f[i] = i16[i] / 32768; som += f[i] * f[i]; }
+      var i16 = new Int16Array(ev.data), f = new Float32Array(i16.length);
+      for (var i = 0; i < i16.length; i++) f[i] = i16[i] / 32768;
       var buf = e.ctx.createBuffer(1, f.length, 16000);
       buf.copyToChannel(f, 0);
       var src = e.ctx.createBufferSource();
@@ -482,8 +442,6 @@
       var begin = Math.max(e.ctx.currentTime + 0.05, e.volgende);
       src.start(begin);
       e.volgende = begin + f.length / 16000;
-      e.stukken.push([begin, e.volgende, Math.sqrt(som / f.length)]);
-      if (e.stukken.length > 600) e.stukken.splice(0, 300);
     };
     e.ws.onerror = function () { if (echt === e && !e.open) mislukt("Hugo is nu niet bereikbaar. Probeer het later nog eens."); };
     e.ws.onclose = function (ev) {
@@ -494,73 +452,9 @@
       setTimeout(function () { if (echt === e) ophangen(); }, rest + 300);
     };
   }
-  toonZin("hugo", ZAKEN[zaak].stil, true);
-
-  // Het snoer: een lijn met lusjes, zoals een telefoonsnoer van opzij. Golft mee met wie er praat.
-  var svg = document.getElementById("snoer");
-  var lijn = document.getElementById("snoerLijn"), achter = document.getElementById("snoerAchter"), schaduw = document.getElementById("snoerSchaduw");
-  var B = 0, H = 0, fase = 0, niveau = 0.06, vorig = null, zichtbaar = true;
-  function maat() { B = svg.clientWidth; H = svg.clientHeight; svg.setAttribute("viewBox", "0 0 " + B + " " + H); }
-  function teken(t) {
-    var marge = 30, lengte = B + marge * 2;
-    var b = H * 0.125, c = b * 1.05, a = 11 / (Math.PI * 2);   // ringen van ~30px, elke 11px een nieuwe
-    var lussen = Math.ceil(lengte / (Math.PI * 2 * a));
-    var midden = H * 0.4, voor = "", acht = "", sch = "", vorigeSoort = null, vx = 0, vy = 0;
-    for (var u = 0; u <= Math.PI * 2 * lussen; u += 0.24) {
-      var x = -marge + a * u - b * Math.sin(u + fase);
-      var rel = Math.max(0, Math.min(1, (x + marge) / lengte));
-      var venster = Math.sin(Math.PI * rel);
-      var golf = niveau * H * 0.2 * Math.sin(rel * 9 - t * 3.1) * venster + niveau * H * 0.07 * Math.sin(rel * 23 - t * 5.3) * venster;
-      var dikte = c * (1 + niveau * 0.35 * (0.5 + 0.5 * Math.sin(rel * 14 - t * 4)));
-      var y = midden + H * 0.18 * venster + golf + dikte * Math.cos(u + fase);
-      var soort = (a - b * Math.cos(u + fase)) >= 0 ? "v" : "a";   // vooruit = voorkant van de ring, terug = achterkant
-      var pt = " " + x.toFixed(1) + " " + y.toFixed(1);
-      if (soort !== vorigeSoort) {
-        var start = vorigeSoort === null ? "M" + pt : "M " + vx.toFixed(1) + " " + vy.toFixed(1) + " L" + pt;
-        if (soort === "v") voor += start; else acht += start;
-      } else if (soort === "v") voor += " L" + pt; else acht += " L" + pt;
-      if (soort === "v") sch += (vorigeSoort === "v" ? " L" : " M") + " " + x.toFixed(1) + " " + (y + 11).toFixed(1);
-      vorigeSoort = soort; vx = x; vy = y;
-    }
-    lijn.setAttribute("d", voor); achter.setAttribute("d", acht); schaduw.setAttribute("d", sch);
-  }
-  function lus(ts) {
-    if (!zichtbaar) { vorig = null; return; }
-    var t = ts / 1000, dt = vorig === null ? 0 : Math.min(.05, t - vorig); vorig = t;
-    var doel;
-    if (echt && echt.open) {
-      var nu = echt.ctx.currentTime, h = 0;
-      for (var k = echt.stukken.length - 1; k >= 0; k--) {
-        var st = echt.stukken[k];
-        if (st[0] <= nu && nu < st[1]) { h = st[2]; break; }
-        if (st[1] < nu - 1) break;
-      }
-      if (h > 0.012) echt.laatstHugo = nu;
-      var hugoPraat = nu - echt.laatstHugo < 0.6 && echt.laatstHugo > 0;
-      if (echt.laatstHugo > 0) echteZin(hugoPraat ? "hugo" : "jij");
-      doel = h > 0.012 ? Math.min(1, 0.25 + h * 5)
-           : echt.micNiveau > 0.02 ? Math.min(0.6, 0.12 + echt.micNiveau * 4)
-           : 0.06;
-    } else {
-      doel = spreker === "hugo" ? 0.55 + 0.45 * Math.abs(Math.sin(t * 8.3) * Math.sin(t * 3.1))
-           : spreker === "jij" ? 0.22 + 0.12 * Math.abs(Math.sin(t * 6.7))
-           : 0.06;
-    }
-    niveau += (doel - niveau) * Math.min(1, dt * 6);
-    fase += dt * (0.25 + niveau * 1.6);
-    teken(t);
-    requestAnimationFrame(lus);
-  }
-  maat(); teken(0);
-  addEventListener("resize", function () { maat(); teken(performance.now() / 1000); });
-  if (!rustigScroll) {
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (es) {
-        es.forEach(function (e) { var was = zichtbaar; zichtbaar = e.isIntersecting; if (zichtbaar && !was) requestAnimationFrame(lus); });
-      }).observe(podium);
-    }
-    requestAnimationFrame(lus);
-  }
+  toonTelefoon();
+  schuif(links);
+  setInterval(function () { if (stand === "rust") toonTelefoon(); }, 20000);
 
   // formulier naar Formspree
   var FORM_ENDPOINT = "https://formspree.io/f/xrewjzvl";

@@ -82,45 +82,64 @@ section{padding:120px 0}
 .probeer-zin em{font-family:'Source Serif 4',serif;font-style:italic;font-size:21px;color:var(--ink)}
 .kop .verzonnen{font-size:13.5px;color:var(--soft);margin-top:8px}
 .verzonnen a{color:inherit;text-underline-offset:3px}
-.demo .podium{height:640px;background:#3c5653 url(vlak-petrol.png) center/cover no-repeat}
-.stem{position:absolute;left:0;right:0;top:66px;z-index:2;text-align:center;padding:0 36px}
-.wie-praat{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(243,239,231,.7)}
-.zin{font-family:'Source Serif 4',serif;font-weight:400;font-size:clamp(22px,2.05vw,28px);line-height:1.24;letter-spacing:-.015em;color:#fbf9f4;margin:12px auto 0;max-width:17em}
-.zin .w{opacity:0;transition:opacity .3s ease,color .7s ease}
-.zin .w.aan{opacity:1}
-.zin .w.nieuw{color:#ecd0a4}
-.zin.jij{font-style:italic;color:rgba(243,239,231,.8)}
-.snoer{position:absolute;left:0;top:262px;z-index:1;width:100%;height:120px;overflow:visible}
-.snoer path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-#snoerLijn{stroke:#efd8b0;stroke-width:2.1}
-#snoerAchter{stroke:rgba(222,196,152,.42);stroke-width:1.6}
-#snoerSchaduw{stroke:rgba(6,24,24,.28);stroke-width:5;filter:blur(4px)}
+.demo .podium{height:640px;background-color:#ecebe5;background-image:
+  radial-gradient(70% 50% at 50% -6%,#fff 0%,rgba(255,255,255,0) 60%),
+  radial-gradient(80% 55% at 50% 106%,#dbe6e0 0%,rgba(219,230,224,0) 62%)}
 
-.telefoon{position:absolute;left:50%;bottom:-300px;z-index:3;width:320px;height:560px;margin-left:-160px;border-radius:56px;padding:11px;
-  background:linear-gradient(150deg,#4a4e4d 0%,#1f2121 32%,#111212 70%,#2b2e2d 100%);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18),inset 0 0 0 5px #0a0b0b,0 40px 80px rgba(6,20,20,.45),0 8px 22px rgba(6,20,20,.3)}
-.telefoon::before,.telefoon::after{content:"";position:absolute;width:4px;border-radius:2px;background:linear-gradient(90deg,#2d302f,#4a4e4d)}
-.telefoon::before{left:-3px;top:118px;height:58px}
-.telefoon::after{right:-3px;top:150px;height:88px}
-.scherm{position:relative;height:100%;border-radius:46px;overflow:hidden;padding:14px 14px 0;
-  background:radial-gradient(130% 70% at 50% 0%,#213330 0%,#0e1514 55%,#080a0a 100%)}
-.eiland{height:46px;border-radius:24px;background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 20px;color:#fff;font-size:15px;box-shadow:0 0 0 1px rgba(255,255,255,.04)}
-.eiland .naam{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-right:12px}
-.eiland .tijd{font-family:'IBM Plex Mono',monospace;font-size:14px;color:#7c817d;font-variant-numeric:tabular-nums;transition:color .3s}
-.belt .eiland .tijd{color:#5fd08a}
-.scherm-status{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--petrol-licht);text-align:center;margin-top:24px}
-.scherm-knoppen{display:flex;justify-content:center;gap:10px;margin-top:20px}
-.knoppen-bellen{display:none}
-.belt .knoppen-bellen{display:flex}
-.belt .knoppen-rust,.belt .scherm-noot{display:none}
-.pil{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;
-  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.6);border-radius:999px;padding:11px 18px;cursor:pointer;transition:background .2s,color .2s}
-.pil:hover{background:rgba(255,255,255,.15)}
-.pil svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.pil.rood{background:var(--rood);border-color:var(--rood)}
-.pil.rood:hover{background:#e65a4e}
-.pil.uit{background:#fff;color:var(--ink)}
-.scherm-noot{font-size:12.5px;color:#7f8580;text-align:center;margin-top:12px}
+.tel{--inkt:#16191a;--zacht:#6f7a78;--flauw:#9aa5a2;--groen:#2f9e6f;
+  position:absolute;left:50%;top:26px;width:284px;height:588px;margin-left:-142px;border-radius:50px;padding:11px;
+  font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',system-ui,sans-serif;color:var(--inkt);
+  background:linear-gradient(158deg,#4a4f4e 0%,#15181a 18%,#1b1f21 50%,#0c0e10 82%,#3c4241 100%);
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.16),0 2px 3px rgba(0,0,0,.3),0 30px 60px -28px rgba(16,20,22,.55)}
+.tel::before{content:'';position:absolute;inset:0;border-radius:50px;pointer-events:none;z-index:20;
+  background:linear-gradient(125deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,0) 74%,rgba(255,255,255,.18) 100%)}
+.tel-zij{position:absolute;width:3px;border-radius:4px;background:linear-gradient(90deg,#0e1112,#43494a)}
+.tel-zij.a{left:-3px;top:100px;height:30px}
+.tel-zij.b{left:-3px;top:150px;height:54px}
+.tel-zij.c{left:-3px;top:214px;height:54px}
+.tel-zij.d{right:-3px;top:166px;height:86px;background:linear-gradient(270deg,#0e1112,#43494a)}
+.tel-scherm{position:relative;width:100%;height:100%;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;
+  background:radial-gradient(110% 60% at 78% 2%,#fefaf6 0%,rgba(254,250,246,0) 56%),
+    linear-gradient(178deg,#fbf8f4 0%,#f2efe9 30%,#e6ede8 62%,#d3e4d9 88%,#c3dbcc 100%)}
+.tel-eiland{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:80px;height:24px;border-radius:14px;background:#08090a;z-index:9}
+.tel-balk{display:flex;align-items:center;justify-content:space-between;padding:15px 24px 0;font-size:12px;font-weight:600;line-height:1.55}
+.tel-rechts{display:flex;align-items:center;gap:5px}
+.tel-staaf{display:flex;align-items:flex-end;gap:1.5px;height:9px}
+.tel-staaf i{width:2.4px;background:var(--inkt);border-radius:1px}
+.tel-staaf i:nth-child(1){height:3.5px}
+.tel-staaf i:nth-child(2){height:5px}
+.tel-staaf i:nth-child(3){height:7px}
+.tel-staaf i:nth-child(4){height:9px}
+.tel-accu{width:20px;height:10px;border:1.3px solid var(--inkt);border-radius:3px;position:relative;opacity:.88}
+.tel-accu::after{content:'';position:absolute;inset:1.3px;width:70%;background:var(--inkt);border-radius:1.2px}
+.tel-lock{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 22px 16px;text-align:center;min-height:0}
+.tel-klok{margin-top:30px;line-height:1}
+.tel-dag{font-size:13.5px;font-weight:500;color:var(--zacht)}
+.tel-uur{font-size:56px;font-weight:250;letter-spacing:-.035em;margin-top:4px;font-variant-numeric:tabular-nums}
+.tel-onder{margin-top:auto;width:100%}
+.tel-melding{font-size:13px;line-height:1.5;color:#a2463f;background:rgba(224,72,63,.09);border:1px solid rgba(224,72,63,.18);border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.tel-melding:empty{display:none}
+.tel-spoor{position:relative;height:60px;border-radius:999px;background:rgba(255,255,255,.5);border:1px solid rgba(22,25,26,.06);
+  box-shadow:inset 0 1px 3px rgba(22,25,26,.07),0 1px 0 rgba(255,255,255,.6);overflow:hidden;touch-action:none;cursor:pointer}
+.tel-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:30px;font-size:13.5px;font-weight:500;pointer-events:none;
+  background:linear-gradient(100deg,var(--flauw) 0%,var(--flauw) 38%,var(--inkt) 50%,var(--flauw) 62%,var(--flauw) 100%);background-size:260% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:glans 2.6s linear infinite}
+@keyframes glans{0%{background-position:130% 0}100%{background-position:-130% 0}}
+.tel-greep{position:absolute;top:4px;left:4px;width:50px;height:50px;border-radius:50%;border:0;padding:0;background:linear-gradient(150deg,#fff,#f1f4f2);
+  box-shadow:0 5px 14px -4px rgba(22,25,26,.34),inset 0 0 0 1px rgba(255,255,255,.9);display:grid;place-items:center;cursor:grab;touch-action:none}
+.tel-greep:active{cursor:grabbing}
+.tel-greep svg{width:21px;height:21px;fill:var(--groen)}
+.tel-greep.los{transition:left .28s cubic-bezier(.22,1,.36,1)}
+.tel-op{display:none;flex-direction:column;align-items:center;gap:8px}
+.tel-rood{width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(150deg,#ec5a50,#cf3a31);display:grid;place-items:center;
+  box-shadow:0 12px 26px -9px rgba(207,58,49,.8),inset 0 0 0 1px rgba(255,255,255,.18)}
+.tel-rood svg{width:25px;height:25px;fill:#fff;transform:rotate(134deg)}
+.tel-op span{font-size:11.5px;color:var(--zacht);font-weight:500}
+.tel-noot{font-size:10px;color:var(--flauw);line-height:1.5;margin-top:14px}
+.tel-streep{width:104px;height:4px;border-radius:3px;background:rgba(22,25,26,.24);margin:12px auto 0}
+.verbinden .tel-spoor,.aan .tel-spoor,.klaar .tel-spoor{display:none}
+.verbinden .tel-op,.aan .tel-op{display:flex}
+.klaar .tel-op{display:flex;visibility:hidden}
 
 /* samenvatting */
 .samen-raster{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
@@ -146,7 +165,7 @@ section{padding:120px 0}
 
 /* zaken */
 .zaken{border-top:1px solid var(--line)}
-.zaken-rij{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.zaken-rij{margin-top:56px;display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
 .zaak{border-top:1px solid var(--ink);padding-top:18px}
 .zaak q{display:block;margin-top:18px;font-family:'Source Serif 4',serif;font-style:italic;font-size:25px;line-height:1.22;color:var(--ink);quotes:"“" "”"}
 .zaak p{margin-top:14px;font-size:15.5px;color:var(--soft)}
@@ -186,7 +205,6 @@ section{padding:120px 0}
 
 @media (max-width:1060px){
   .demo-raster,.samen-raster,.aanvraag-raster{grid-template-columns:1fr;gap:48px}
-  .zaken-rij{grid-template-columns:1fr 1fr}
   .nav-links{display:none}
   .voet-raster{grid-template-columns:repeat(3,1fr)}
   .voet-merk{grid-column:1/-1}
@@ -204,12 +222,6 @@ section{padding:120px 0}
   .hero-sub{font-size:18px}
   .hero-tekst{max-width:none}
   section{padding:80px 0}
-  .demo .podium{height:560px}
-  .stem{top:52px;padding:0 20px}
-  .zin{font-size:21px}
-  .snoer{top:228px;height:96px}
-  .telefoon{width:272px;height:500px;margin-left:-136px;bottom:-272px;border-radius:50px}
-  .scherm{border-radius:40px}
   .samen .podium{height:auto;padding:56px 16px}
   .punten{grid-template-columns:1fr}
   .zaken-rij{grid-template-columns:1fr}
@@ -221,5 +233,5 @@ section{padding:120px 0}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .in{opacity:1;transform:none;transition:none}
-  .zin .w{transition:none}
+  .tel-hint{animation:none}
 }

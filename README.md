@@ -12,13 +12,13 @@ Dit is een **losse, schone repo met alléén de website** — bewust los van het
 | `privacy.html` | Privacyverklaring (diensten per soort genoemd, zonder bedrijfsnamen) |
 | `stijl.css` | Gedeelde stijl voor beide pagina's (fonts via Google Fonts) |
 | `kunstbeeld.png` | Kunstbeeld van het telefoonsnoer, alleen bovenaan de homepage |
-| `vlak-petrol.png`, `vlak-zand.png` | Geschilderde korrelvlakken achter de telefoon en de samenvatting |
+| `vlak-zand.png` | Geschilderd korrelvlak achter de samenvatting (`vlak-petrol.png` is niet meer in gebruik) |
 | `og-image.jpg` | Deelplaatje (1200×630): slogan + telefoonsnoer, zoals de bovenkant van de site |
 | `favicon.svg`, `favicon-48.png`, `apple-touch-icon.png` | Icoontje: de petrol stip uit het logo op een crème tegel |
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
 | `sitemap.xml` | Sitemap (homepage, over, privacy) |
 
-> De Garage- en Kapsalon-demo bellen echt: ze verbinden via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). De andere branches zijn nagespeelde voorbeelden. Links onder de keuzes staat dat gesprekken met de garage en de kapsalon worden opgenomen, met een link naar `privacy.html`.
+> De Garage- en Kapsalon-demo bellen echt: ze verbinden via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). Andere branches komen pas op de site als hun demo af is. Links onder de keuzes staat dat gesprekken worden opgenomen, met een link naar `privacy.html`.
 
 > Contactformulier post naar Formspree: `https://formspree.io/f/xrewjzvl`.
 
