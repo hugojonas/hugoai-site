@@ -83,9 +83,10 @@
     <div class="kop in">
       <span class="mono">[ Live demo ]</span>
       <h2>Praat met Hugo.</h2>
-      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Ervaar hoe hij de telefoon aanneemt voor een garage of een kapsalon.</p>
+      <p>Voer een live gesprek met Hugo, rechtstreeks vanuit je browser. Ervaar hoe hij de telefoon aanneemt voor een garage, restaurant of kapsalon.</p>
       <div class="kies" role="tablist" aria-label="Kies met wie je praat">
         <button class="keuze actief" type="button" role="tab" aria-selected="true" data-zaak="garage"><span>Garage</span><small>Live · Autobedrijf Lindehof</small></button>
+        <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="restaurant"><span>Restaurant</span><small>Live · Restaurant Hazelhof</small></button>
         <button class="keuze" type="button" role="tab" aria-selected="false" data-zaak="kapsalon"><span>Kapsalon</span><small>Live · Kapsalon De Vlecht</small></button>
       </div>
       <p class="probeer-zin"><span class="mono">Probeer</span><em id="probeer">“Kan mijn auto donderdag voor de APK?”</em></p>
@@ -168,6 +169,7 @@
     </div>
     <div class="zaken-rij">
       <div class="zaak in"><span class="mono">Garage</span><q>Kan mijn auto donderdag voor de APK?</q><p>APK, onderhoud of een proefrit: Hugo legt de afspraak vast, inclusief kenteken en contactgegevens.</p><a class="bel-zaak" href="#demo" data-zaak="garage">Bel deze zaak →</a></div>
+      <div class="zaak in"><span class="mono">Restaurant</span><q>Hebben jullie zaterdag nog een tafel voor vier?</q><p>Reserveringen, groepsgrootte en dieetwensen worden direct en volledig genoteerd.</p><a class="bel-zaak" href="#demo" data-zaak="restaurant">Bel deze zaak →</a></div>
       <div class="zaak in"><span class="mono">Kapsalon</span><q>Kan ik morgen nog geknipt worden?</q><p>Hugo stemt een tijdstip af en legt de gewenste behandeling vast.</p><a class="bel-zaak" href="#demo" data-zaak="kapsalon">Bel deze zaak →</a></div>
     </div>
   </div>
@@ -215,6 +217,7 @@
     <nav class="voet-kolom" aria-label="Branches">
       <p class="mono">Branches</p>
       <a class="kies-zaak" href="#demo" data-zaak="garage">Garages</a>
+      <a class="kies-zaak" href="#demo" data-zaak="restaurant">Restaurants</a>
       <a class="kies-zaak" href="#demo" data-zaak="kapsalon">Kapsalons</a>
     </nav>
     <nav class="voet-kolom" aria-label="Bedrijf">
@@ -276,6 +279,7 @@
   // De telefoon in de demo. Elke zaak hier is een echte demo op de server.
   var ZAKEN = {
     garage: { kop: "Autobedrijf Lindehof", sector: "autobedrijf-lindehof_v3", probeer: "“Kan mijn auto donderdag voor de APK?”" },
+    restaurant: { kop: "Restaurant Hazelhof", sector: "restaurant-hazelhof", probeer: "“Hebben jullie zaterdag nog een tafel voor vier?”" },
     kapsalon: { kop: "Kapsalon De Vlecht", sector: "kapsalon-de-vlecht", probeer: "“Kan ik morgen nog geknipt worden?”" }
   };
   var zaak = "garage";

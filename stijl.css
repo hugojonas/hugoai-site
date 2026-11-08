@@ -165,7 +165,7 @@ section{padding:120px 0}
 
 /* zaken */
 .zaken{border-top:1px solid var(--line)}
-.zaken-rij{margin-top:56px;display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
+.zaken-rij{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 .zaak{border-top:1px solid var(--ink);padding-top:18px}
 .zaak q{display:block;margin-top:18px;font-family:'Source Serif 4',serif;font-style:italic;font-size:25px;line-height:1.22;color:var(--ink);quotes:"“" "”"}
 .zaak p{margin-top:14px;font-size:15.5px;color:var(--soft)}

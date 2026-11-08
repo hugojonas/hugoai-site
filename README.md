@@ -18,7 +18,7 @@ Dit is een **losse, schone repo met alléén de website** — bewust los van het
 | `robots.txt` | Zoekmachine-instructies + sitemap-verwijzing |
 | `sitemap.xml` | Sitemap (homepage, over, privacy) |
 
-> De Garage- en Kapsalon-demo bellen echt: ze verbinden via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). Andere branches komen pas op de site als hun demo af is. Links onder de keuzes staat dat gesprekken worden opgenomen, met een link naar `privacy.html`.
+> De Garage-, Restaurant- en Kapsalon-demo bellen echt: ze verbinden via WebSocket met de HugoAI-server (nu nog via ngrok op Hugo's laptop). Andere branches komen pas op de site als hun demo af is. Links onder de keuzes staat dat gesprekken worden opgenomen, met een link naar `privacy.html`.
 
 > Contactformulier post naar Formspree: `https://formspree.io/f/xrewjzvl`.
 
