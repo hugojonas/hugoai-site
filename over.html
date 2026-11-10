@@ -211,5 +211,19 @@
   document.getElementById("jaar").textContent = new Date().getFullYear();
 })();
 </script>
+<script>
+/* Bezoek tellen zonder cookies: een seintje naar onze eigen server in Nederland (zie privacy.html, blok 04). */
+(function () {
+  try {
+    if (!/^(www\.)?hugoai\.nl$/.test(location.hostname)) return;
+    var bron = "";
+    try { bron = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+    var u = "https://demo.hugoai.nl/tel?h=" + encodeURIComponent(location.hostname) +
+      "&p=" + encodeURIComponent(location.pathname + location.hash) +
+      "&r=" + encodeURIComponent(bron) + "&w=" + (screen.width || 0);
+    if (navigator.sendBeacon) navigator.sendBeacon(u); else new Image().src = u;
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

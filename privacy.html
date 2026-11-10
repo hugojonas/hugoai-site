@@ -83,7 +83,7 @@
     <span class="mono">[ Privacy ]</span>
     <h1 style="margin-top:22px">Privacyverklaring</h1>
     <p class="lede">Wat HugoAI doet met je gegevens als je deze website bezoekt, met Hugo praat of een demo aanvraagt.</p>
-    <p class="mono datum">Laatst bijgewerkt op 9 november 2026</p>
+    <p class="mono datum">Laatst bijgewerkt op 10 november 2026</p>
   </div>
 </div>
 
@@ -130,7 +130,8 @@
   <div class="wrap">
     <div><span class="mono">[ 04 ]</span><h2>Deze website bezoeken</h2></div>
     <div class="lopend">
-      <p>hugoai.nl gebruikt geen cookies, geen bezoekersstatistieken en geen advertenties.</p>
+      <p>hugoai.nl gebruikt geen cookies en geen advertenties.</p>
+      <p>We tellen wel hoeveel mensen de website bezoeken. Daarvoor stuurt je browser bij elk bezoek een seintje naar onze eigen server in Nederland, met de pagina die je bekijkt, de naam van de website waar je vandaan kwam (bijvoorbeeld google.com) en de breedte van je scherm. Je IP-adres slaan we daarbij alleen ingekort op, zodat het niet naar jou te herleiden is. We gebruiken dit alleen om te zien hoe vaak de website en de demo bezocht worden.</p>
       <p>Wel zijn er bij elk bezoek twee diensten betrokken die je IP-adres te zien krijgen:</p>
       <ul>
         <li>de hostingdienst, die de pagina's naar je browser stuurt;</li>
@@ -167,6 +168,7 @@
     <div class="lopend">
       <ul>
         <li><strong>Gespreksopnames en het logboek:</strong> een jaar. Daarna worden ze verwijderd.</li>
+        <li><strong>Bezoekerstellingen:</strong> het ingekorte IP-adres 14 dagen. De tellingen zelf, zonder IP-adres, bewaren we zolang de website bestaat.</li>
         <li><strong>Aanvragen en e-mails:</strong> zolang we contact hebben. Komt er geen samenwerking, dan verwijderen we ze uiterlijk een jaar na het laatste contact.</li>
       </ul>
     </div>
@@ -242,6 +244,20 @@
   var nav = document.getElementById("nav");
   addEventListener("scroll", function () { nav.classList.toggle("rand", scrollY > 8); }, { passive: true });
   document.getElementById("jaar").textContent = new Date().getFullYear();
+})();
+</script>
+<script>
+/* Bezoek tellen zonder cookies: een seintje naar onze eigen server in Nederland (zie privacy.html, blok 04). */
+(function () {
+  try {
+    if (!/^(www\.)?hugoai\.nl$/.test(location.hostname)) return;
+    var bron = "";
+    try { bron = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+    var u = "https://demo.hugoai.nl/tel?h=" + encodeURIComponent(location.hostname) +
+      "&p=" + encodeURIComponent(location.pathname + location.hash) +
+      "&r=" + encodeURIComponent(bron) + "&w=" + (screen.width || 0);
+    if (navigator.sendBeacon) navigator.sendBeacon(u); else new Image().src = u;
+  } catch (e) {}
 })();
 </script>
 </body>
