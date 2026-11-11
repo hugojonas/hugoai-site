@@ -216,6 +216,17 @@
 (function () {
   try {
     if (!/^(www\.)?hugoai\.nl$/.test(location.hostname)) return;
+    /* Hugo's eigen apparaten tellen niet mee: één keer ?niet-tellen openen (terugdraaien met ?wel-tellen). */
+    try {
+      if (/[?&]niet-tellen\b/.test(location.search)) {
+        localStorage.setItem("hugoai-niet-tellen", "1");
+        alert("Dit apparaat telt vanaf nu niet meer mee in het overzicht.");
+      } else if (/[?&]wel-tellen\b/.test(location.search)) {
+        localStorage.removeItem("hugoai-niet-tellen");
+        alert("Dit apparaat telt weer mee in het overzicht.");
+      }
+      if (localStorage.getItem("hugoai-niet-tellen")) return;
+    } catch (e) {}
     var bron = "";
     try { bron = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
     var u = "https://demo.hugoai.nl/tel?h=" + encodeURIComponent(location.hostname) +
